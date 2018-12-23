@@ -1,0 +1,343 @@
+ {% extends 'menu/menu.html.twig' %}
+ {% block estilos %}
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></link>
+  <link rel="stylesheet" href="/resources/demos/style.css"></link>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="mdtimepicker.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<style type="text/css">
+	#tabla_clientes_filter label{
+  display: none;
+}
+	.modal-dialog {
+	     width: 50%;
+	  }
+ 
+.modal-header {
+    background-color: #7EC820;
+    padding:16px 16px;
+    color:#FFF;
+    border-bottom:2px dashed #7EC820;-
+ }
+ [for="busquedapersonal"] { display: block !important;}
+.dataTables_wrapper .dataTables_filter{
+  float: left !important;
+  text-align: left !important;
+  width: 30em !important;
+}
+tr{
+	text-align: center;
+	color: green;
+}
+table th {
+
+  background-color: white;
+  font-size: 16px;
+   }
+table tr:nth-child(odd) {background-color:   #F5F5F5;}
+table tr:nth-child(even) {background-color: #ADD8E6;}
+
+table{
+	
+  width: 1000px;
+
+}
+#div1 {
+     overflow:scroll;
+     height:350px;
+     width: 1025px;
+     margin: auto;
+}
+</style>
+  {%endblock%}
+
+{% block body %}
+<script type="text/javascript">
+	$(document).ready(function() {
+    
+	 $('#tabla_clientes').DataTable( {
+          "bLengthChange":false,
+          "bFilter":true,
+          "bInfo":false,
+          "bAutoWidth":false,
+          "pageLength": 4,
+          "language": {
+              "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+           },
+                initComplete: function () {
+                  var div=$("#tabla_clientes_wrapper");
+                  div.find("#tabla_clientes_filter").prepend("<label for='busquedapersonal'>Buscar  <input type='text' id='busqueda3'  name='busqueda3' placeholder='Cliente a Buscar'></label>");
+                this.api().columns(0).every( function () {
+                  var column = this;
+                  $("#busqueda3").on( 'keyup change', function () {
+                    if ( column.search() !== this.value ) {
+                        column
+                        .search( this.value )
+                        .draw();
+                          }
+                      });
+                  });
+            },
+        });
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1; //January is 0!
+      var yyyy = today.getFullYear();
+      if(dd<10){
+          dd='0'+dd;
+      } 
+      if(mm<10){
+          mm='0'+mm;
+      } 
+      var today = dd+'/'+mm+'/'+yyyy;
+      document.getElementById("fecha1").value = today;
+      $('.loader').hide();
+  });
+  $( function() {
+       $.datepicker.regional['es'] = {
+            closeText: 'Cerrar',
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+            dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+      };
+    $.datepicker.setDefaults($.datepicker.regional['es']);
+    $("#fecha1").datepicker();
+    $("#intervalocreaciondesde").datepicker();
+    $("#intervalocreacionhasta").datepicker();
+    
+  });
+
+
+function reporteticket(nroventa){
+  window.open("ventas/reporteticket/"+nroventa);
+}
+  function generar(){
+
+    if(document.getElementById('nrorenta').value=='' && document.getElementById('fecha1').value=='' && document.getElementById('foliorenta').value=='' && document.getElementById('intervalocreaciondesde').value=='' && document.getElementById('intervalocreacionhasta').value=='' && document.getElementById('estatuspago').value=='' && document.getElementById('estatusdev').value=='' && document.getElementById('cliente').value==''){
+      alert('Debe llenar al menos alguno de los campos para evitar saturación y caída por realizar una consulta tan ambigua')
+      exit();
+    }
+
+
+    var nvent='';
+    var pagado=0;
+    $("#tbla > tbody").empty();
+    $('.loader').show();
+          $.post("{{ path('generar_avanzada') }}", {pedido:document.getElementById('nrorenta').value,folio:document.getElementById('foliorenta').value,fecha:document.getElementById('fecha1').value,desde:document.getElementById('intervalocreaciondesde').value,hasta:document.getElementById('intervalocreacionhasta').value,statuspago:document.getElementById('estatuspago').value,statusdev:document.getElementById('estatusdev').value,cliente:document.getElementById('cliente').value}, 
+      function(mensaje) {
+        $(".loader").hide();
+          for (var i=0, total = mensaje.length; i < total; i++) {
+           if(nvent != mensaje[i]["pedido"]){
+               $("#tbla").append("<tr class='dev' id='fila1'><td style='text-align: center; color:blue; text-decoration: underline; cursor:pointer;' onclick='detallespedido();'>"+mensaje[i]["Pedido"]+"</td><td style='text-align: center;'>"+mensaje[i]["Folio"]+"</td><td style='text-align: center'>"+mensaje[i]["Cliente"]+"</td><td style='text-align: center'>"+mensaje[i]["Obra"]+"</td><td style='text-align: center'>"+mensaje[i]["telefono"]+"</td><td style='text-align: center'>"+mensaje[i]["fecha"]+"</td><td style='text-align: center'>"+mensaje[i]["devolucion"]+"</td><td style='text-align: center'>"+mensaje[i]["montototalpago"]+"</td><td style='text-align: center'>"+mensaje[i]["por_pagar"]+"</td><td style='text-align: center'>"+mensaje[i]["status"]+"</td></tr>");
+            }
+          nvent=mensaje[i]["Pedido"];
+          }
+          
+      });
+          
+  }
+  function detallespedido(){
+       $("#tbla").on("click", "td" , function(){
+        var celda = $(this);
+        pedidotabla = $(this).parents("tr").find("td").eq(0).html();
+        if(celda.html()=='Ver Ticket'){
+
+          reporteticket(pedidotabla)
+        }
+
+
+          var pd = pedidotabla;
+          $("#gif").show();
+        var url=("{{ path('pedidos_detalles', { 'id':'xxx' }) }}");
+         url = url.replace("xxx", pd);
+        $.ajax({
+            dataType: "html",
+            url: url,
+            type: "GET",
+            data: {id: pd},
+            success: function(data)
+            {
+             location.href=url;   
+            }
+        });   
+        }); 
+    }
+      
+  function limpiar(){
+  
+  }
+
+function activarcasilla(check){
+
+	
+ }
+ function reportet(){
+  }
+  </script>
+  <div class="alert alert-info alert-dismissible" role="alert" style="height: 50px;">
+  		<marquee><p style="font-family: Impact; font-size: 18pt; margin-top: -0.5%;">BÚSQUEDA AVANZADA</p></marquee>
+  </div>
+	<div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab" style="" align="center">
+      <div class="col-md-4"  style="margin-top: 1%;">
+          <div class="panel panel-default">
+           <div class="panel-body" style="background-color: #87CEEB;">
+          <div class="panel-heading" style="text-align: center; color: green; font-size: 170%;"><span class="glyphicon glyphicon-stats"></span>  Buscar Por:</div>
+          <label style="font-size: 150%;">Nro. Renta</label>
+             <input id="nrorenta" class="form-control" type="text" placeholder="Nro de Renta" >
+               <label style="font-size: 150%;">Folio de Renta</label>
+             <input id="foliorenta" class="form-control" type="text" placeholder="Folio de Renta" >
+               <label style="font-size: 150%;">Cliente: </label><button style="margin-top: -0.9%;" type="button" id="actualizarhorario" class="btn btn-success btn-xs glyphicon glyphicon-search" data-toggle="modal" data-target="#clientes" data-whatever="@getbootstrap"></button>
+             <input id="cliente" class="form-control" type="text" disabled="true" >
+             <br>
+             <div>
+             <label style="text-align: center; font-size: 150%;">Creados</label>
+             </div>
+             <div class="col-md-6">
+           <label style="font-size: 150%;">Desde</label>
+             <input id="intervalocreaciondesde" class="form-control" type="text">
+           </div>
+             <div class="col-md-6">
+               <label style="font-size: 150%;">Hasta</label>
+               <input id="intervalocreacionhasta" class="form-control" type="text">
+           </div>
+              <label style="font-size: 150%;">Fecha de Devolución</label>
+             <input id="fecha1" class="form-control" type="text">
+             <label style="font-size: 150%;">Estado de Saldo</label>
+             <select class="form-control" id="estatuspago">
+              <option></option>
+               <option value="1">Debe</option>
+               <option value="2">Pagado</option>
+             </select>
+              <label style="font-size: 150%;">Estado de Devolución</label>
+             <select class="form-control" id="estatusdev">
+              <option></option>
+               <option value="1">Normal</option>
+               <option value="4">Pendiente en Devolver</option>
+               <option value="2">Devuelto</option>
+             </select>
+
+           	<br>
+
+             <button class="btn btn-success btn_generar" onclick="generar();">  Generar</button>
+             <button class="btn btn-success"  onclick="recargar();" >  Nueva Consulta</button>
+           </div>
+       </div>
+   </div>
+</div>
+	<div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab" style="" align="center">
+        <div class="col-md-8"  style="margin-top: 1%;">
+          <div class="panel panel-default">
+           <div class="panel-body" style="background-color: #87CEEB;">
+
+
+
+           	<h3 style="text-align: center;">RESULTADOS DE BUSQUEDA</h3>
+
+
+           	<div id="div1" style="height: 280px;" class="table table-dark">
+			  <table id="tbla" width="100%" align="center" class="table">
+          <thead>
+			     <tr id="consul_pedido" align="center" style="color: green;">
+			     	<th style="text-align: center;">Renta</th>
+			         <th style="text-align: center;">Folio</th>
+			         <th style="text-align: center;">Cliente</th>
+			         <th style="text-align: center;">Obra</th>
+			         <th style="text-align: center;">Teléfono</th>
+               <th style="text-align: center;">Fecha Renta</th>
+               <th style="text-align: center;">Fecha Devolución</th>
+			         <th style="text-align: center;">Pagado</th>
+               <th style="text-align: center;">Por Pagar</th>
+               <th style="text-align: center;">Estado Devolución</th>
+			     </tr>
+           </thead>
+           <tbody>
+             
+           </tbody>
+			  </table>  
+			</div>
+			<br>
+
+
+
+           </div>
+       </div>
+   </div>
+</div>
+
+
+  <div class="modal fade" id="clientes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+       <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+             <h4 class="modal-tittle" style="text-align: center; color: #ffffff;"><span class="glyphicon glyphicon-user"></span> Seleccionar Cliente</h4>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <script type="text/javascript">
+                  $('.loader').show();
+                </script>
+                <table id="tabla_clientes"  class="display" style="width:100%;height: 15px;">
+                  <thead>
+                     <tr >
+                       <th style="text-align: center;">Cliente</th>
+                       <th style="text-align: center;">Domicilio</th>
+                       <th style="text-align: center;">Obra</th>
+                       <th style="text-align: center;">Acción</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                    {% for clientes in clientes %}
+                      <tr>
+                          <td style="text-align: center;">{{ clientes.razon_social }}<input id="idcliente" type="text" name="" value="{{ clientes.razon_social }}" hidden="hidden"></td>
+                          <td style="text-align: center;">{{ clientes.domicilio }}</td>
+                          <td style="text-align: center;">{{ clientes.cuenta_id }}<input id="idobra" type="text" name="" value="{{ clientes.cuenta_id }}" hidden="hidden" ></td>
+                          <td><button class="btn btn-success btn-sm btn_agregar_cliente" type="button"> <span class="glyphicon glyphicon-plus"></span>  Agregar</button></td>
+                      </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+                <script type="text/javascript">
+                  $('.loader').hide();
+                </script>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          </div>
+
+        </div>
+      </div>
+  </div>
+<script type="text/javascript">
+   $('#tabla_clientes tbody').on('click', '.btn_agregar_cliente', function () {
+      var btn = this;
+      $tr = $(this).closest('tr');
+      var data = $('#tabla_clientes').DataTable().row($tr).data();
+       document.getElementById('cliente').value= $tr.find("#idcliente").val();
+       $(this).attr("data-dismiss","modal"); 
+    });   
+
+
+   function recargar(){
+    location.reload();
+   }
+
+</script>
+{% endblock %}

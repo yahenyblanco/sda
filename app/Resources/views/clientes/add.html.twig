@@ -1,0 +1,354 @@
+{% extends 'menu/menu.html.twig' %}
+{% block estilos %}
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+  {#<Link rel="stylesheet" href="{{ asset('css/usuario_sist.css')}}">#}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.0.1/css/bootstrap3/bootstrap-switch.css">
+   <!-- Include SmartWizard CSS -->
+  <link href="{{ asset('wizard/dist/css/smart_wizard.css') }}" rel="stylesheet }}" type="text/css" />
+
+    <!-- Optional SmartWizard theme -->
+    <link href="{{ asset('wizard/dist/css/smart_wizard_theme_circles.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('wizard//dist/css/smart_wizard_theme_arrows.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('wizard//dist/css/smart_wizard_theme_dots.css') }}" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+   <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.0.1/js/bootstrap-switch.js"></script>
+<style type="text/css">
+  tr{
+    color: green;
+  }
+</style>
+         {%endblock%}
+         {% block javascripts %}
+        
+            
+         {% endblock %} 
+{% block body %}
+        <div class="container">
+            <div class="row">
+             <div class="alert alert-info alert-dismissible" role="alert" style="height: 50px;">
+              <marquee><p style=" font-family: Impact; font-size: 18pt; margin-top: -0.5%;">AGREGAR CLIENTES  <span id="nroventa" hidden="hidden"></span></p> </marquee>
+            </div>
+            </div>
+            <div class="container">
+  <div class="row">
+    <div class="col_md_12">
+      <div class="panel panel-default">
+          <div class="panel-heading" style="text-align: center;background-color:#87CEEB;; font-size: 140%;">COMPLETAR LOS SIGUIENTES DATOS</div>
+          <br>
+            <form action="#" id="myForm" role="form" data-toggle="validator" method="post" accept-charset="utf-8">
+
+        <!-- SmartWizard html -->
+        <div id="smartwizard">
+            <ul>
+                <li><a href="#step-1">Paso 1<br /><small>Datos del Cliente</small></a></li>
+                <li><a href="#step-2">Paso 2<br /><small>Obras del Cliente</small></a></li>
+                
+            </ul>
+
+            <div>
+                <div id="step-1">
+                    <h2 style="text-align: center;">Datos del Clientes</h2>
+                    <div id="form-step-0" role="form" data-toggle="validator">
+                        <div class="form-group">
+                            <label for="email">Nombre del cliente o Empresa</label>
+                            <input type="text" class="form-control" name="clientename" id="clientename" placeholder="Datos del cliente o empresa" required="required">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">RFC</label>
+                            <input type="text" class="form-control" name="rfc" id="rfc" placeholder="RFC">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Domicilio</label>
+                            <textarea class="form-control" name="domicilio"></textarea>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Ciudad</label>
+                            <input type="text" class="form-control" name="ciudad" id="ciudad" placeholder="Ciudad" >
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+                         <div class="form-group">
+                            <label for="email">Correo</label>
+                            <input type="email" class="form-control" name="correo" id="correo" placeholder="Correo" >
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+                         <div class="form-group">
+                            <label for="email">Teléfono 1</label>
+                            <input type="text" class="form-control" name="telefono1" id="telefono1" placeholder="Telefono 1" >
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+                         <div class="form-group">
+                            <label for="email">Teléfono 2</label>
+                            <input type="text" class="form-control" name="telefono2" id="telefono2" placeholder="Telefono 2" >
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+                         <div class="form-group">
+                            <label for="email">Comentarios</label>
+                            <textarea class="form-control" name="comentario" id="comentario"></textarea>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                           
+                    </div>
+
+                </div>
+                <div id="step-2">
+                  <button type="button" class="btn btn-success " data-toggle="modal" data-target="#myModal" style="display: block;margin: auto;"><span class="glyphicon glyphicon-th-list"></span> Agregar Obras</button>
+                    <h2 style="text-align: center;">Obras del cliente</h2>
+                    <div id="form-step-1" role="form" data-toggle="validator">
+                        
+{#<button id="addRow" type="button">Agregar</button>#}
+
+                        <table id="obras">
+                            <thead>                                
+                                <th>Obra</th>
+                                <th>Ubicación</th>
+                                <th>Comentarios</th>
+                                <th>Obras Activas</th>
+                                <th>Accion</th>
+                            </thead>
+                        </table>
+                      </div>
+                  </div>
+               
+               
+            </div>
+        </div>
+      </div>
+    </div>
+        </form>
+        </div>
+
+
+ 
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Obras</h4>
+      </div>
+
+
+
+
+
+
+      <div class="modal-body">
+         <div class="form-group">
+           <div class="form-group">
+                            <label for="email">Nombre de la Obra</label>
+                            <input type="text" class="form-control" name="nombre_obra" id="nbobra">
+                        </div>
+                            <label for="email">Ubicacion</label>
+                            <input type="text" name="ubicacionobra" id="ubicacionobra" class="form-control">
+                        </div>
+                       
+                        <div class="form-group">
+                            <label for="email">Comentarios</label>
+                            <textarea class="form-control" name="comentario2" id="comentario2"></textarea>                        
+                        </div>
+                        <div class="form-group">
+                              <label for="email">¿Obra Activa?</label>
+                             <input id="TheCheckBox2" name="activa" class="BSswitch activa" type="radio" data-off-text="No" data-on-text="Si" > 
+                        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" id="addRow">Agregar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="modalclose" onclick="cerrar();">Cerrar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block addscript %}
+   <!-- Include jQuery -->
+ {#|   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>#}
+    <!-- Include jQuery Validator plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
+
+ <!-- Include SmartWizard JavaScript source -->
+    <script type="text/javascript" src="{{ asset('wizard/dist/js/jquery.smartWizard.min.js') }}"></script>
+
+    <script type="text/javascript">
+       function cerrar(){
+            document.getElementById('nbobra').value='';
+                document.getElementById('comentario2').value='';
+                document.getElementById('ubicacionobra').value='';
+          }
+        $(document).ready(function(){
+         
+ $('#clientename').on( 'change', function () {
+ 	console.log($(this).val());
+      $.ajax({
+      type: "POST",
+      dataType: 'json',
+      url: "{{ path('buscar_clientes') }}",
+      data: {nombre:$(this).val()},
+   	   }).done(function(respuesta){
+          if(respuesta == true){
+          	alert("Este registro ya existe");
+          	$("#clientename").focus();
+          	$("#clientename").val('');
+          }
+       });
+});
+
+            // Toolbar extra buttons
+            var btnFinish = $('<button></button>').text('Finalizar')
+                                             .addClass('btn btn-info')
+                                             .on('click', function(){
+                                                    if( !$(this).hasClass('disabled')){
+                                                        var elmForm = $("#myForm");
+                                                        if(elmForm){
+                                                            elmForm.validator('validate');
+                                                            var elmErr = elmForm.find('.has-error');
+                                                            if(elmErr && elmErr.length > 0){
+                                                                alert('Oops we still have error in the form');
+                                                                return false;
+                                                            }else{
+
+                                                              var table = $('#obras').DataTable(); 
+                                                              if ( !table.data().count() ) {
+                                                                    alert( 'Necesita al menos una obra' );
+                                                                    return false;
+                                                              }
+                                                             //   alert('Great! we are ready to submit form');
+                                                                elmForm.submit();
+                                                                return false;
+                                                            }
+                                                        }
+                                                    }
+                                                });
+            var btnCancel = $('<button></button>').text('Cancelar')
+                                             .addClass('btn btn-danger')
+                                             .on('click', function(){
+                                                    $('#smartwizard').smartWizard("reset");
+                                                    $('#myForm').find("input, textarea").val("");
+                                                });
+
+
+
+            // Smart Wizard
+            $('#smartwizard').smartWizard({
+                    selected: 0,
+                    theme: 'dots',
+                    transitionEffect:'fade',
+                     lang: {  // Language variables
+                        next: 'Siguiente', 
+                        previous: 'Anterior'
+                    },
+                    toolbarSettings: {toolbarPosition: 'bottom',
+                                      toolbarExtraButtons: [btnFinish, btnCancel]
+                                    },
+                    anchorSettings: {
+                                markDoneStep: true, // add done css
+                                markAllPreviousStepsAsDone: true, // When a step selected by url hash, all previous steps are marked done
+                                removeDoneStepOnNavigateBack: true, // While navigate back done step after active step will be cleared
+                                enableAnchorOnDoneStep: true // Enable/Disable the done steps navigation
+                            }
+                 });
+
+            $("#smartwizard").on("leaveStep", function(e, anchorObject, stepNumber, stepDirection) {
+                var elmForm = $("#form-step-" + stepNumber);
+                // stepDirection === 'forward' :- this condition allows to do the form validation
+                // only on forward navigation, that makes easy navigation on backwards still do the validation when going next
+                if(stepDirection === 'forward' && elmForm){
+                    elmForm.validator('validate');
+                    var elmErr = elmForm.children('.has-error');
+                    if(elmErr && elmErr.length > 0){
+                        // Form validation failed
+                        return false;
+                    }
+                }
+                return true;
+            });
+
+            $("#smartwizard").on("showStep", function(e, anchorObject, stepNumber, stepDirection) {
+                // Enable finish button only on last step
+                if(stepNumber == 3){
+                    $('.btn-finish').removeClass('disabled');
+                }else{
+                    $('.btn-finish').addClass('disabled');
+                }
+            });
+
+        });
+
+
+             $(document).ready(function() {
+                $('#obras').DataTable({
+                   "language": {
+                      "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                    },
+                });
+
+                var t = $('#obras').DataTable();
+ 
+                $('#addRow').on( 'click', function () {
+                  var obra = $("#nbobra").val()
+                  var ubicacionobra = $("#ubicacionobra").val()
+                  var comentarios   = $("#comentario2").val();
+
+                  if(comentarios == ""){
+                    alert("Ingrese un comentario");
+                    return false;
+                  }
+
+                  var statusobras  = $('.activa').bootstrapSwitch('state');
+                  if(statusobras == false){
+                    var estado = "Inactiva";
+                  }else{
+                    var estado = "Normal";
+                  }
+
+                t.row.add( [
+                      obra +'<input type="hidden" value="'+obra+'" name="nombreobra[]">',
+                      ubicacionobra +'<input type="hidden" value="'+ubicacionobra+'" name="obrasubicacion[]">',   
+                      comentarios +'<input type="hidden" value="'+comentarios+'" name="obrascomentarios[]">',                      
+                      estado +'<input type="hidden" value="'+estado+'" name="obrasestado[]">',                      
+                      '<button class="btn btn-danger" type="button" id="cancelar"><span class="glyphicon glyphicon-remove"></span></button>'
+                ] ).draw( false );
+
+                $('#myModal').hide();
+                $('.modal-backdrop').hide();
+                $("body").removeClass('modal-open')
+                document.getElementById('nbobra').value='';
+                document.getElementById('comentario2').value='';
+                document.getElementById('ubicacionobra').value='';
+              } );
+ 
+
+
+
+ $('#obras tbody').on( 'click', '#cancelar', function () {
+    t
+        .row( $(this).parents('tr') )
+        .remove()
+        .draw();
+} );
+    // Automatically add a first row of data
+    $('.BSswitch').bootstrapSwitch('state', true);
+
+              });
+
+    </script>  
+{% endblock %}

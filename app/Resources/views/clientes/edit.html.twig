@@ -1,0 +1,430 @@
+{% extends 'menu/menu.html.twig' %}
+{% block estilos %}
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+  {#<Link rel="stylesheet" href="{{ asset('css/usuario_sist.css')}}">#}
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.0.1/css/bootstrap3/bootstrap-switch.css">
+   <!-- Include SmartWizard CSS -->
+  <link href="{{ asset('wizard/dist/css/smart_wizard.css') }}" rel="stylesheet }}" type="text/css" />
+
+    <!-- Optional SmartWizard theme -->
+  <link href="{{ asset('wizard/dist/css/smart_wizard_theme_circles.css') }}" rel="stylesheet" type="text/css" />
+  <link href="{{ asset('wizard//dist/css/smart_wizard_theme_arrows.css') }}" rel="stylesheet" type="text/css" />
+  <link href="{{ asset('wizard//dist/css/smart_wizard_theme_dots.css') }}" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.0.1/js/bootstrap-switch.js"></script>
+  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+         {% endblock %}
+
+         {% block javascripts %}
+                  
+            
+         {% endblock %} 
+{% block body %}
+<style type="text/css">
+  tr{
+    color:green;  }
+</style>
+    <div class="container">
+      <div class="row">
+        <div class="alert alert-info alert-dismissible" role="alert" style="height: 50px;">
+          <marquee><p style="font-family: Impact; font-size: 18pt; margin-top: -0.5%;">Cliente {{datosclientes.cliente}}:    {{datosclientes.razonSocial}}</p></marquee>
+        </div>
+                      <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab" style="" align="center">
+        <div class="col-md-6"  style="margin-top: 1%;">
+          <div class="panel panel-default">
+           <div class="panel-body" style="background-color: #87CEEB;">
+          <div class="panel-heading" style="text-align: center; color: green; font-size: 170%;"><span class="glyphicon glyphicon-user
+"></span> Datos del Cliente:</div>
+                              <form id="form1">
+                                <input type="hidden" value="{{ datosclientes.cliente }}" name="idclientes">
+                                   <div class="form-group">
+                                      <label for="email">Nombre del cliente o Empresa</label>
+                                      <input type="text" class="form-control" name="clientename" id="clientename" placeholder="Datos del cliente o empresa" required value="{{datosclientes.razonSocial}}">
+                                    </div>
+                                    <div class="form-group">
+                            <label for="email">RFC</label>
+                            <input type="text" class="form-control" name="rfc" id="rfc" placeholder="RFC" value="{{datosclientes.rfc}}">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Domicilio</label>
+                            <textarea class="form-control" name="domicilio" >{{datosclientes.domicilioFiscal}}</textarea>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Ciudad</label>
+                            <input type="text" class="form-control" name="ciudad" id="ciudad" placeholder="Ciudad" value="{{datosclientes.ciudad}}">
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+                         <div class="form-group">
+                            <label for="email">Correo</label>
+                            <input type="email" class="form-control" name="correo" id="correo" placeholder="Correo"  value="{{datosclientes.correo}}">
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+                         <div class="form-group">
+                            <label for="email">Teléfono 1</label>
+                            <input type="text" class="form-control" name="telefono1" id="telefono1" placeholder="Telefono 1" value="{{datosclientes.telefono}}" >
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+                         <div class="form-group">
+                            <label for="email">Teléfono 2</label>
+                            <input type="text" class="form-control" name="telefono2" id="telefono2" placeholder="Telefono 2" value="{{datosclientes.telefono2}}">
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+                         <div class="form-group">
+                            <label for="email">Comentarios</label>
+                            <textarea class="form-control" name="comentario" id="comentario">{{datosclientes.comentarios}}</textarea>
+                            <div class="help-block with-errors"></div>
+                        </div>
+
+                        
+
+                         <div class="form-group" >
+                          <label>Restringir</label>&nbsp;&nbsp;<input type="checkbox"  data-toggle="toggle" id="desactivar" name="restrigir" data-onstyle="warning" data-size="mini" data-on="Si" data-off="No">
+                            <label for="email" class="razon">Razon</label>
+                            <textarea class="form-control razon" name="comentariorazon" id="comentariorazon">{{ datosclientes.razonRestriccion }}</textarea>
+                            
+                        </div>
+
+                            <button style="text-align: center;"  id="guardarclientes" type="button" class="btn btn-primary">Guardar</button>
+                          <a style="text-align: center;" id="desactivarclientes" class="btn btn-danger confirmation" href="{{ path('desactivarcliente',{ id:datosclientes.cliente }) }}" onclick="¿Desea desactivar este usuario?">Desactivar</a>
+                              </form>
+                          </div>
+                        </div>
+                      </div>
+                          <div class="col-md-6"  style="margin-top: 1%;">
+          <div class="panel panel-default">
+           <div class="panel-body" style="background-color: #87CEEB;">
+          <div class="panel-heading" style="text-align: center; color: green; font-size: 170%;"><span class="glyphicon glyphicon-user
+"></span> Obras del Cliente:</div>
+                                <table id="editarobras">
+                                    <thead>
+                                        <tr>
+                                            <th>Ubicacion</th>
+                                            <th>Indicaciones</th>
+                                            <th>Obras Activas</th>                      
+                                            <th>Cuenta ID</th>   
+                                        </tr>                                        
+                                    </thead> 
+                                    <tbody>
+                                          {% for obra in obras %}
+                                            <tr>
+                                                <td>
+                                                  <input type="hidden" id="idcuenta" value="{{ obra.id}}">
+                                                  <input type="hidden" id="ubicacion_obra" value="{{ obra.domicilio}}">
+
+                                                  <input type="hidden" id="comentarios_obra" value="{{ obra.comentarios}}">
+
+                                                   <input type="hidden" id="obra_desactivar" value="{{ obra.status}}">
+
+                                                    <input type="hidden" id="cuenta_id" value="{{ obra.cuentaId}}">
+
+                                                    {{ obra.domicilio }}
+                                                </td>
+                                                <td>
+                                                    {{ obra.comentarios }}
+                                                </td>
+                                                <td>
+                                                    {{ obra.status }}
+                                                </td>
+                                                  <td>
+                                                    {{ obra.cuentaId }}
+                                                </td>
+                                            </tr>
+                                          {% endfor %}
+                                    </tbody>                                  
+                                </table>
+                                 <form id="form2">
+                                  <input type="hidden" name="idobrasprincipal" id="idobrasprincipal">
+
+                                  <input type="hidden" name="idclientes" id="idclientes" value="{{ datosclientes.cliente }}">
+                                         <div class="form-group">
+                                          <div class="form-group">
+                                            <label for="email">Nombre de la Obra</label>
+                                            <input type="text" class="form-control" name="cuentaid" id="cuentaid" placeholder="Nombre de la Obra" >
+                                          </div>
+                                            <label for="email">Ubicacion</label>
+                                            <input type="text" class="form-control" name="ubicacionobra" id="ubicacionobra" placeholder="Ubicacion" >
+                                          </div>
+                                          <div class="form-group">
+                                            <label for="email">Indicaciones de la Obra</label>
+                                            <input type="text" class="form-control" name="comentariosobra" id="comentariosobra" placeholder="Indicaciones de la Obra" >
+                                          </div>
+                                          
+                                       <div class="form-group" >
+                                          <label>¿Obra activa?</label>&nbsp;&nbsp;
+      <input type="checkbox"  data-toggle="toggle" id="obradesactivar"  name = "obrasdesactivar" data-onstyle="warning"   data-size="mini" data-on="Si" data-off="No" checked>                            
+                                        </div>
+                                        {# guardarobras #}
+                   <div class="form-group"> 
+                            <div class="col-sm-3">
+                                        <button style="text-align: center;" id="guardarobras" type="button" class="btn btn-primary accionesbotones">Modificar</button>
+                                          <button style="text-align: center;" id="addobras" type="button" class="btn btn-primary accionesbotones">Guardar</button>
+                                         
+                            </div>
+                  </div>
+   <div class="form-group"> 
+      <div class="col-sm-3">
+                   <button id="eliminarobras" type="button" class="btn btn-danger" style="text-align: center;">Eliminar</button>
+                                         
+              </div>
+  </div>
+
+     <div class="form-group"> 
+      <div class="col-sm-3">
+                  
+                                          <button style="text-align: center;" id="cancelaraccion" type="button" class="btn btn-primary">Cancelar</button>
+              </div>
+  </div>
+                                    </form>
+                          </div>
+                      </div>
+                  </div>
+{% endblock %}
+
+{% block addscript %}
+   <!-- Include jQuery -->
+ {#|   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>#}
+    <!-- Include jQuery Validator plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
+
+ <!-- Include SmartWizard JavaScript source -->
+    <script type="text/javascript" src="{{ asset('wizard/dist/js/jquery.smartWizard.min.js') }}"></script>
+
+    <script type="text/javascript">
+$(".razon").hide();       
+{% if datosclientes.restringir == "Restringido" %}
+ $("#desactivar").bootstrapToggle('on');
+ $(".razon").show();
+{% else %}
+$("#desactivar").bootstrapToggle('off');
+{% endif %}
+
+
+/*$("#ubicacionobra").prop('disabled',true)
+$("#comentariosobra").prop('disabled',true)
+$("#obradesactivar").prop('disabled',true)*/
+$("#guardarobras").css('display',"none")
+$("#eliminarobras").prop('disabled',true)
+$("#cancelaraccion").prop('disabled',true)
+
+
+ $(function() {
+                $('#editarobras').DataTable({
+                   "language": {
+                      "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                    },
+                });
+
+
+
+ $( "#desactivar" ).change(function() {
+  if ($(this).prop('checked') == true) {
+    $(".razon").show(1000);
+ }else{
+    $(".razon").hide(1000);
+ } 
+});
+
+
+ var table = $('#editarobras').DataTable();
+ 
+    $('#editarobras tbody').on( 'click', 'tr', function () {
+        if ( $(this).hasClass('selected') ) {
+            $(this).removeClass('selected');
+        }
+        else {
+              $("#guardarobras").css('display',"block")
+              $("#addobras").css('display',"none")
+
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+
+            var btn = this;
+            $tr = $(this).closest('tr');
+            var data = table.row($tr).data();
+            var id = $tr.find("#idcuenta").val();
+            var ubicacion_obra = $tr.find("#ubicacion_obra").val();
+            var comentarios_obra = $tr.find("#comentarios_obra").val();
+            var obra_desactivar = $tr.find("#obra_desactivar").val();
+            var cuenta_id = $tr.find("#cuenta_id").val();
+console.log(obra_desactivar);
+            $("#ubicacionobra").prop('disabled',false)
+            $("#comentariosobra").prop('disabled',false)
+            $("#obradesactivar").prop('disabled',false)
+            $("#guardarobras").prop('disabled',false)
+            $("#eliminarobras").prop('disabled',false)
+            $("#cancelaraccion").prop('disabled',false)
+
+            $("#cuentaid").val(cuenta_id);
+            $("#ubicacionobra").val(ubicacion_obra);
+            $("#comentariosobra").val(comentarios_obra);
+            $("#idobrasprincipal").val(id);
+            if(obra_desactivar == "Normal"){
+              console.log($("#obradesactivar").prop('checked'));
+                  $("#obradesactivar").bootstrapToggle('on');
+            }else{
+                  $("#obradesactivar").bootstrapToggle('off');
+            }
+        }
+    } );
+ 
+    $('#eliminarobras').click( function () {
+      
+      if (table.data().count() == 3 || table.data().count() == 4){
+            alert("No puedes eliminar todas las obras");
+            return false;
+      }else{
+
+var r = confirm("¿Desea eliminar esta obra?");
+if(r == true){
+  $('.loader').show();
+    var formulario = $("#form2").serializeArray();
+    $.ajax({
+      type: "POST",
+      dataType: 'json',
+      url: "{{ path('eliminarobras') }}",
+      data: formulario,
+    }).done(function(respuesta){
+          alert(respuesta);
+          $('.loader').hide();
+          $("#ubicacionobra").prop('disabled',false)
+          $("#comentariosobra").prop('disabled',false)
+          $("#obradesactivar").prop('disabled',false)
+          $("#guardarobras").prop('disabled',false)
+          $("#eliminarobras").prop('disabled',true)   
+          $("#cancelaraccion").prop('disabled',true)   
+
+ $("#guardarobras").css('display',"none")
+              $("#addobras").css('display',"block")
+
+           $("#cuentaid").val('');
+                $("#ubicacionobra").val('');
+                $("#comentariosobra").val(''); 
+
+
+          table.row('.selected').remove().draw( false );      
+    });
+  }//finaliza respuesta
+      }// finaliza condicion
+    } );
+
+
+$("#guardarclientes").click(function(){
+  $('.loader').show();
+    var formulario = $("#form1").serializeArray();
+    
+    $.ajax({
+      type: "POST",
+      dataType: 'json',
+      url: "{{ path('guardarcliente') }}",
+      data: formulario,
+    }).done(function(respuesta){
+          alert(respuesta);
+          $('.loader').hide();
+       //    location.reload();
+    });
+    
+  });
+
+
+
+$("#guardarobras").click(function(){
+    var formulario = $("#form2").serializeArray();
+    $('.loader').show();
+    $.ajax({
+      type: "POST",
+      dataType: 'json',
+      url: "{{ path('guardarobras') }}",
+      data: formulario,
+    }).done(function(respuesta){
+          alert(respuesta);
+          $('.loader').hide();
+          $("#ubicacionobra").prop('disabled',true)
+$("#comentariosobra").prop('disabled',true)
+$("#obradesactivar").prop('disabled',true)
+$("#guardarobras").prop('disabled',true)
+$("#eliminarobras").prop('disabled',true)
+ location.reload();
+
+    });
+  });
+
+
+$("#cancelaraccion").click(function(){
+              $("#guardarobras").css('display',"none")
+              $("#addobras").css('display',"block")
+             $("#eliminarobras").prop('disabled',true)
+              $("#cancelaraccion").prop('disabled',true)
+
+                $("#cuentaid").val('');
+            $("#ubicacionobra").val('');
+            $("#comentariosobra").val('');
+
+  });
+
+
+
+$("#addobras").click(function(){
+
+  if($("#cuentaid").val()=="" || $("#ubicacionobra").val() == "" || $("#comentariosobra").val() == ""){
+        alert("Los datos de las obras son obligatorios");
+        return false;
+  }
+    var formulario = $("#form2").serializeArray();
+    $('.loader').show();
+    $.ajax({
+      type: "POST",
+      dataType: 'json',
+      url: "{{ path('addobras') }}",
+      data: formulario,
+    }).done(function(respuesta){
+      var ubicacionobra = respuesta[0]['domicilio'];
+      var comentarios   = respuesta[0]['comentarios'];
+      var estado        = respuesta[0]['status'];
+      var idcuenta      = respuesta[0]['id'];
+      var cuentaid      = respuesta[0]['cuentaid'];
+          alert(respuesta[0]['mensaje']);
+          $('.loader').hide();
+              table.row.add( [
+                      ubicacionobra +'<input type="hidden" value="'+idcuenta+'" id="idcuenta"> <input type="hidden" value="'+ubicacionobra+'" id="ubicacion_obra">',   
+                      comentarios +'<input type="hidden" value="'+comentarios+'" id="comentarios_obra">',                      
+                      estado +'<input type="hidden" value="'+estado+'" id="obra_desactivar">', 
+                      cuentaid +'<input type="hidden" value="'+cuentaid+'" id="cuenta_id">',
+                      
+                ] ).draw( false );
+
+
+                $("#cuentaid").val('');
+                $("#ubicacionobra").val('');
+                $("#comentariosobra").val('');
+
+
+    });
+  });
+
+  });
+
+ var elems = document.getElementsByClassName('confirmation');
+    var confirmIt = function (e) {
+        if (!confirm('¿Desea eliminar este cliente?')) e.preventDefault();
+        $("#cuentaid").val('');
+                $("#ubicacionobra").val('');
+                $("#comentariosobra").val('');
+    };
+    for (var i = 0, l = elems.length; i < l; i++) {
+        elems[i].addEventListener('click', confirmIt, false);
+    }
+    </script>  
+{% endblock %}

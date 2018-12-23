@@ -1,0 +1,222 @@
+consultas_pedidos_archivados:
+    path:     /consultaarchivos
+    defaults: { _controller: "GestionBundle:Pedidos:consultapdarch" }
+busqueda_avanzada:
+    path:     /busqavanzada
+    defaults: { _controller: "GestionBundle:Pedidos:busquedaAvanzada" }    
+tabla_archivos:
+    path:     /archivos
+    defaults: { _controller: "GestionBundle:Pedidos:consultapdarchivado" }
+    methods:  [POST, GET]
+pedidos_index:
+    path:     /
+    defaults: { _controller: "GestionBundle:Pedidos:index" }
+    methods:  GET
+pedidos_show:
+    path:     /{id}/show
+    defaults: { _controller: "GestionBundle:Pedidos:show" }
+    methods:  GET
+inicio_detalles:
+    path:     /home
+    defaults: { _controller: "GestionBundle:Pedidos:home" }
+    methods:  GET
+pedidos_detalles:
+    path:     /detallespedido/{id}
+    defaults: { _controller: "GestionBundle:Pedidos:detallespedido" }
+    methods:  GET
+pedidos_archivoprueba:
+    path:     /pedidosarchivo/{id}
+    defaults: { _controller: "GestionBundle:Pedidos:detallesarchivo" }
+    methods:  GET
+pedidos_entregar:
+    path:     /entregarpedidos
+    defaults: { _controller: "GestionBundle:Pedidos:entregarpedidos" }
+    methods:  [POST, GET]
+pedidos_cobrar:
+    path:     /cobrarpedido
+    defaults: { _controller: "GestionBundle:Pedidos:cobrarpedido" }
+    methods:  [POST, GET]
+pedidos_factura:
+    path:     /facturarpedidos
+    defaults: { _controller: "GestionBundle:Pedidos:facturarpedidos" }
+    methods:  [POST, GET]
+cotizaciones_detalles:
+    path:     /detallescot/{cot}
+    defaults: { _controller: "GestionBundle:Pedidos:detallescotizaciones" }
+    methods:  [POST, GET]
+modificar_pedido:
+    path:     /modificar
+    defaults: { _controller: "GestionBundle:Pedidos:modificarpedido" }
+    methods:  [POST, DELETE,GET]
+eliminar_cotizacion:
+    path:     /eliminarcot
+    defaults: { _controller: "GestionBundle:Pedidos:eliminarcot" }
+    methods:  [POST, GET]
+eliminar_pedido:
+    path:     /eliminar
+    defaults: { _controller: "GestionBundle:Pedidos:eliminarpedido" }
+    methods:  [POST, GET]
+buscar_datos:
+    path:     /buscar
+    defaults: { _controller: "GestionBundle:Pedidos:buscarclave" }
+    methods:  [POST, GET]
+registro_folio:
+    path:     /folio/
+    defaults: { _controller: "GestionBundle:Pedidos:registrofolio" }
+    methods:  [POST, GET,UPDATE]
+registro_pago:
+    path:     /pago
+    defaults: { _controller: "GestionBundle:Pedidos:registropago" }
+    methods:  [POST, GET,UPDATE]
+agregar_folio:
+    path:     /agregarfolio
+    defaults: { _controller: "GestionBundle:Pedidos:agregarfolio" }
+    methods:  [POST, GET,UPDATE]
+buscar_eq:
+    path:     /buscareq
+    defaults: { _controller: "GestionBundle:Pedidos:buscarequipos" }
+    methods:  [POST, GET]
+gestion_rentas:
+    path:     /rentas
+    defaults: { _controller: "GestionBundle:Pedidos:gestionrentas" }
+    methods:  [POST, GET]
+datalist:
+    path:     /dt
+    defaults: { _controller: "GestionBundle:Pedidos:llenardt" }
+    methods:  [POST, GET]
+llenarcuentas:
+    path:     /cta
+    defaults: { _controller: "GestionBundle:Pedidos:llenarcta" }
+    methods:  [POST, GET]
+registrar_pedidos:
+    path:     /rgs
+    defaults: { _controller: "GestionBundle:Pedidos:registrarpedido" }
+    methods:  [POST, GET]
+act_pago:
+    path:     /act
+    defaults: { _controller: "GestionBundle:Pedidos:actpago" }
+    methods:  [POST, GET]
+configuracion:
+    path:     /conf
+    defaults: { _controller: "GestionBundle:Pedidos:configuracion" }
+    methods:  [POST, GET]
+gestion_pagos:
+    path:     /pagos
+    defaults: { _controller: "GestionBundle:Pedidos:gestionpagos" }
+    methods:  [POST, GET]
+consultas_pedidos:
+    path:     /cltpeds
+    defaults: { _controller: "GestionBundle:Pedidos:consultaspds" }
+    methods:  [POST, GET]
+clt_pedidos:
+    path:     /flped
+    defaults: { _controller: "GestionBundle:Pedidos:consultaspdstabla" }
+    methods:  [POST, GET]
+consultas_dev2:
+    path:     /clstdev
+    defaults: { _controller: "GestionBundle:Pedidos:consultdevdetalles" }
+    methods:  [POST, GET]
+dev_detallestabla:
+    path:     /fldevtbl
+    defaults: { _controller: "GestionBundle:Pedidos:detallesdv" }
+    methods:  [POST, GET]
+dev_detallestabla2:
+    path:     /fldevtbl2
+    defaults: { _controller: "GestionBundle:Pedidos:detallesdv2" }
+    methods:  [POST, GET]
+dev_detallestabla3:
+    path:     /fldevtbl3
+    defaults: { _controller: "GestionBundle:Pedidos:detallesdv3" }
+    methods:  [POST, GET]
+obtener_pedido2:
+    path:     /obtpd2
+    defaults: { _controller: "GestionBundle:Pedidos:obtpd2" }
+    methods:  [POST, GET]
+imprimir_Pedido:
+    path:     /detallespedido/reportepedido/{pedido}
+    defaults: { _controller: "GestionBundle:Pedidos:reportepedido" }
+    methods:  [POST, GET]
+imprimir_Pedido_ticket:
+    path:     /detallespedido/reporteticket/{pedido}
+    defaults: { _controller: "GestionBundle:Pedidos:reporteticket" }
+    methods:  [POST, GET]
+imprimir_PedidoArchivo:
+    path:     /detallespedido/reportepedidoarchivo/{pedido}
+    defaults: { _controller: "GestionBundle:Pedidos:reportepedidoarchivo" }
+    methods:  [POST, GET]
+imprimir_cotizaciones:
+    path:     /reportecot/{cotizacion}
+    defaults: { _controller: "GestionBundle:Pedidos:reportecotizacion" }
+    methods:  [POST, GET]
+consulta_foliopago:
+    path:     /cnlfolio
+    defaults: { _controller: "GestionBundle:Pedidos:conslfoliopago" }
+    methods:  [POST, GET]
+cancelar_pedido:
+    path:     /cancped
+    defaults: { _controller: "GestionBundle:Pedidos:modifpedcancelado" }
+    methods:  [POST, GET]
+ultpedido:
+    path:     /ult
+    defaults: { _controller: "GestionBundle:Pedidos:ultipedido" }
+    methods:  [POST, GET]
+consultar_cot:
+    path:     /cltcot
+    defaults: { _controller: "GestionBundle:Pedidos:consultarcot" }
+    methods:  [POST, GET]
+actualiza_estado:
+    path:     /actualizarest
+    defaults: { _controller: "GestionBundle:Pedidos:actualizarestadopd" }
+    methods:  [POST, GET]
+archivar_pedido:
+    path:     /archivar
+    defaults: { _controller: "GestionBundle:Pedidos:archivar" }
+    methods:  [POST, GET]
+conf_estados:
+    path:     /cofestad
+    defaults: { _controller: "GestionBundle:Pedidos:confestados" }
+    methods:  [POST, GET]
+validacion_datos:
+    path:     /validando
+    defaults: { _controller: "GestionBundle:Pedidos:validacion" }
+    methods:  [POST, GET]
+registrar_recoleccion:
+    path:     /rc
+    defaults: { _controller: "GestionBundle:Pedidos:recoleccion" }
+    methods:  [POST, GET]
+eliminar_recoleccion:
+    path:     /eliminarrc
+    defaults: { _controller: "GestionBundle:Pedidos:eliminarrecoleccion" }
+    methods:  [POST, GET]
+consultar_rec:
+    path:     /consultarrec
+    defaults: { _controller: "GestionBundle:Pedidos:consultarrecoleccion" }
+    methods:  [POST, GET]
+filtros_generales:
+    path:     /consultargeneral
+    defaults: { _controller: "GestionBundle:Pedidos:filtrogeneralrecoleccion" }
+    methods:  [POST, GET]
+estado_pedido:
+    path:     /estadoped
+    defaults: { _controller: "GestionBundle:Pedidos:estadopedido" }
+    methods:  [POST, GET]
+busqueda_rapida:
+    path:     /busq
+    defaults: { _controller: "GestionBundle:Pedidos:busquedarapida" }
+    methods:  [POST, GET]
+generar_rapida:
+    path:     /busqcontr
+    defaults: { _controller: "GestionBundle:Pedidos:generarbusqrapida" }
+    methods:  [POST, GET]
+generar_avanzada:
+    path:     /busqavanzadagenerar
+    defaults: { _controller: "GestionBundle:Pedidos:generarbusqavanzada" }
+    methods:  [POST, GET]
+agregar_bitacora:
+    path:     /agregarbitacora
+    defaults: { _controller: "GestionBundle:Pedidos:agregarbitacora" }
+    methods:  [POST, GET]
+detalles_bitacora:
+    path:     /detallesbitacora
+    defaults: { _controller: "GestionBundle:Pedidos:detallesbitacora" }
+    methods:  [POST, GET]

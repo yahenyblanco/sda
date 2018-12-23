@@ -1,0 +1,52 @@
+detalles_devoluciones:
+    path:     /dtdevoluciones/{pd}
+    defaults: { _controller: "GestionBundle:DetallesDevoluciones:detallesdt" }
+    methods:  [POST, GET]
+detalles_devoluciones_archivo:
+    path:     /dtdevolucionesarchivo/{pd}
+    defaults: { _controller: "GestionBundle:DetallesDevoluciones:detallesdtarchivo" }
+    methods:  [POST, GET]
+consultas_folios:
+    path:     /folio
+    defaults: { _controller: "GestionBundle:DetallesDevoluciones:consultarfolio" }
+    methods:  [POST, GET]
+filtros_dev:
+    path:     /fldv
+    defaults: { _controller: "GestionBundle:DetallesDevoluciones:filtrosdevoluciones" }
+    methods:  [POST, GET]
+consultas_devfolio:
+    path:     /actdevfolio
+    defaults: { _controller: "GestionBundle:DetallesDevoluciones:consultafoliodev" }
+    methods:  [POST, GET]
+eliminardev:
+    path:     /eliminardev
+    defaults: { _controller: "GestionBundle:DetallesDevoluciones:eliminardev" }
+    methods:  [POST, GET]
+registrar_devoluciones:
+    path:     /registrodev
+    defaults: { _controller: "GestionBundle:DetallesDevoluciones:registrodevoluciones" }
+    methods:  [POST, GET]
+act_dev:
+    path:     /actdev
+    defaults: { _controller: "GestionBundle:DetallesDevoluciones:actstatusdev" }
+    methods:  [POST, GET]
+clt_devoluciones:
+    path:     /devolfiltros
+    defaults: { _controller: "GestionBundle:DetallesDevoluciones:filtrosdev" }
+    methods:  [POST, GET]
+buscar_folio:
+    path:     /buscarfl
+    defaults: { _controller: "GestionBundle:DetallesDevoluciones:buscarfolio" }
+    methods:  [POST, GET]
+imprimir_dev_pdf:
+    path:     /dtdevoluciones/reportepdfdev/{pedido}
+    defaults: { _controller: "GestionBundle:DetallesDevoluciones:reportepdfdev" }
+    methods:  [POST, GET]
+imprimir_dev_ticket:
+    path:     /dtdevoluciones/reporteticketdev/{pedido}
+    defaults: { _controller: "GestionBundle:DetallesDevoluciones:reporteticketdev" }
+    methods:  [POST, GET]
+pedidos_dedev:
+    path:     /dtdevolucionesarchivo/pedidosarchivo/{id}
+    defaults: { _controller: "GestionBundle:Pedidos:detallesarchivo" }
+    methods:  GET

@@ -1,0 +1,600 @@
+{% extends 'menu/menu.html.twig' %}
+{% block estilos %}
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></link>
+    <link rel="stylesheet" href="/resources/demos/style.css"></link>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{%endblock%}
+         {% block javascripts %}
+         {% endblock %}
+
+ 
+
+
+{% block body %}
+{% set cliente =''  %}
+{% set chek =''  %}
+  {% set obra =''  %}
+     {% set fecha =''  %}
+     {% set descuento =0  %}
+     {% set entrega =0  %}
+     {% set nventa =''  %}
+  {% if id == 0 %}
+    {% set btnimprimir = 'disabled="true"'  %}
+    {% set btnarchivar = 'disabled="true"' %}
+    {% set btngenerar = '' %}
+    {% set btneliminar = 'disabled="true"' %}
+  {% else %}
+  {% for datosventas in datosventas %}
+  
+  {% set nventa = datosventas.nroVenta %}
+     {% set cliente = datosventas.cliente %}
+     {% set obra = datosventas.cuenta_id %}
+     {% set fecha = datosventas.Fecha %}
+     {% set descuento = datosventas.descuento %}
+     {% set entrega = datosventas.costoEntrega %}
+  {% if datosventas.iva == 1 %}
+    {% set chek ='checked'  %}
+  {% endif %}
+  {% endfor %}
+    {% set btneliminar = ''  %}
+    {% set btnimprimir = ''  %}
+    {% set btnarchivar = '' %}
+    {% set btngenerar = 'disabled="true"' %}
+  {% endif %}
+  {% for archivado in archivado %}
+    {% if archivado.paso == '1' %}
+      {% set btneliminar = 'hidden=hidden'  %}
+      {% set btnarchivar = 'hidden=hidden' %}
+      {% set btngenerar  = 'hidden=hidden' %}
+    {% endif %}
+  {% endfor %}
+
+
+
+<style type="text/css">
+ .modal-dialog {
+          width: 50%;
+  }
+ 
+.modal-header {
+    background-color: #7EC820;
+    padding:16px 16px;
+    color:#FFF;
+    border-bottom:2px dashed #7EC820;
+ }
+#tabla_equipos_filter input[type=search]{
+  display: none;
+}
+
+#tabla_equipos_filter label{
+  display: none;
+}
+#tabla_clientes_filter label{
+  display: none;
+}
+
+#tabla_equipos_ag input[type=search]{
+  display: none;
+}
+
+#tabla_equipos_ag label{
+  display: none;
+}
+[for="busquedapersonal"] { display: block !important;}
+[for="busquedapersonal2"] { display: block !important;}
+[for="busquedapersonal3"] { display: block !important;}
+.dataTables_wrapper .dataTables_filter{
+  float: left !important;
+  text-align: left !important;
+  width: 30em !important;
+}
+tr{
+	text-align: center;
+	color: green;
+}
+
+</style>
+<script type="text/javascript">
+  $( function() {
+       $.datepicker.regional['es'] = {
+            closeText: 'Cerrar',
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+            dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+      };
+    $.datepicker.setDefaults($.datepicker.regional['es']);
+    $("#fecha1").datepicker();
+  });
+	$(document).ready(function() {
+    if (document.getElementById('fecha1').value==''){
+      fec=new Date; 
+dia=fec.getDate(); 
+if (dia<10) dia='0'+dia; 
+mes=fec.getMonth() + 1; 
+
+if (mes<10) mes='0'+mes; 
+anio=fec.getFullYear(); 
+document.getElementById('fecha1').value=dia+'/'+mes+'/'+anio;
+
+
+    }
+   
+    var dato=0;
+                 $('#tabla_equipos').DataTable( {
+                  "bLengthChange":false,
+                  "bFilter":true,
+                  "bInfo":false,
+                  "bAutoWidth":false,
+                  "pageLength": 5,
+              "language": {
+                  "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+              },
+              initComplete: function () {
+                var div=$("#tabla_equipos_wrapper");
+                div.find("#tabla_equipos_filter").prepend("<label for='busquedapersonal'>Buscar  <input type='text' id='busqueda'  name='busqueda' placeholder='Equipo a Buscar'></label>");
+            	this.api().columns(1).every( function () {
+                var column = this;
+                
+                    $("#busqueda").on( 'keyup change', function () {
+                        if ( column.search() !== this.value ) {
+                                        column
+                                            .search( this.value )
+                                            .draw();
+                                    }
+                    });
+                });
+    		  },
+      
+        
+          });
+
+$('#tabla_clientes').DataTable( {
+                  "bLengthChange":false,
+                  "bFilter":true,
+                  "bInfo":false,
+                  "bAutoWidth":false,
+                  "pageLength": 4,
+              "language": {
+                  "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+              },
+              initComplete: function () {
+                var div=$("#tabla_clientes_wrapper");
+                div.find("#tabla_clientes_filter").prepend("<label for='busquedapersonal'>Buscar  <input type='text' id='busqueda3'  name='busqueda3' placeholder='Cliente a Buscar'></label>");
+              this.api().columns(0).every( function () {
+                var column = this;
+                
+                    $("#busqueda3").on( 'keyup change', function () {
+                        if ( column.search() !== this.value ) {
+                                        column
+                                            .search( this.value )
+                                            .draw();
+                                    }
+                    });
+                });
+          },
+      
+        
+          });
+
+
+
+          $('#tabla_equipos_agregados').DataTable({
+                  "bLengthChange":false,
+                  "bFilter":true,
+                  "bInfo":false,
+                  "bAutoWidth":false,
+	              "language": {
+	                  "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+	              },
+              initComplete: function () {
+                var div=$("#tabla_equipos_wrapper2");
+                div.find("#tabla_equipos_ag").prepend("<label for='busquedapersonal2'>Buscar  <input type='text' id='busqueda2'  name='busqueda2' placeholder='Equipo a Buscar'></label>");
+            	this.api().columns(0).every( function () {
+                var column = this;
+                
+                    $("#busqueda2").on( 'keyup change', function () {
+                        if ( column.search() !== this.value ) {
+                                column
+                                    .search( this.value )
+                                    .draw();
+                        }
+                    });
+                });
+    		  },
+          });
+          calcular();
+ 	});
+</script>
+<div class="alert alert-info alert-dismissible" role="alert" style="height: 50px;">
+  <marquee><p style=" font-family: Impact; font-size: 18pt; margin-top: -0.5%; " >NUEVA VENTA <span id="nroventa">{{nventa}}</span></p> </marquee>
+</div>
+
+   <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+        <div class="col-md-6"  style="">
+          <div class="panel panel-default">
+          <div class="panel-heading" style="text-align: center;background-color:#81C827;">COMPLETE LOS SIGUIENTES CAMPOS:</div>
+
+           <div class="panel-body" style="background-color: #87CEEB;">
+
+  	        <label style="font-size: 150%;">Cliente:</label> <button style="margin-top: -0.9%;" type="button" id="actualizarhorario" class="btn btn-primary btn-xs glyphicon glyphicon-search" data-toggle="modal" data-target="#clientes" data-whatever="@getbootstrap" {{btngenerar}}></button>
+  	        <input type="text" name="" value="{{cliente}}" id="inpt_cliente" class="form-control" placeholder="Seleccione el Cliente" disabled="true">
+  	        <label style="font-size: 150%;">Obra</label>
+            <input type="text" value="{{obra}}" id="nombreobra" class="form-control" placeholder="Obra" disabled="true">
+            <label style="font-size: 150%;">Fecha</label>
+            <input id="fecha1" class="form-control" type="text" value="{{fecha}}">
+
+           <br>
+		    <br>
+       
+             <table id="tabla_equipos"  class="display" style="width:100%">
+		      <thead>
+		         <tr >
+	             <th style="text-align: center;">Equipo</th>
+	             <th style="text-align: center;">Clave</th>
+	             <th style="text-align: center;">Precio Venta</th>
+	             <th style="text-align: center;">Cantidad</th>
+	             <th style="text-align: center;">Acción</th>
+	         </tr>
+	       </thead>
+         
+	        <tbody>
+                
+                  {% for equipos in datosequipos %}
+                    <tr>
+                        <td style="text-align: center;">{{ equipos.equipo }}<input id="nbequipo" type="text" name="" value="{{ equipos.equipo }}" hidden="hidden"></td>
+                        <td style="text-align: center;">{{ equipos.clave }}<input id="nbclave" type="text" name="" value="{{ equipos.clave }}" hidden="hidden"></td>
+                        <td style="text-align: center;">{{ equipos.precioventa }}<input id="nbprecio" type="text" name="" value="{{ equipos.precioventa }}" hidden="hidden" ></td>
+                        <td><input id="nbcantidad" type="text" name="" placeholder="Cantidad" style="text-align: center;"></td>
+                        <td style="text-align: center;"> <button class="btn btn-success btn-sm btn_agregar" {{btngenerar}}> <span class="glyphicon glyphicon-plus" ></span>  Agregar</button></td>
+                    </tr>
+                  {% endfor %}
+
+            </tbody>
+   </table>
+  
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+        <div class="col-md-6"  style="">
+          <div class="panel panel-default">
+          <div class="panel-heading" style="text-align: center;background-color:#81C827;">EQUIPOS AÑADIDOS:</div>
+          	
+
+
+           <div class="panel-body" style="background-color: #87CEEB;">
+           		<table id="tabla_equipos_agregados"  class="display" style="width:100%">
+		      <thead>
+		         <tr >
+	             <th style="text-align: center;">Equipo</th>
+	             <th style="text-align: center;">Clave</th>
+	             <th style="text-align: center;">Precio Venta</th>
+	             <th style="text-align: center;">Cantidad</th>
+	             <th style="text-align: center;">Importe</th>
+	             <th style="text-align: center;">Acción</th>
+	         </tr>
+	       </thead>
+	        <tbody>
+            {% if id != 0 %}
+              {% for datosventas in datosventas %}
+                <tr>
+                    <td style="text-align: center;">{{ datosventas.equipo }}</td>
+                    <td style="text-align: center;">{{ datosventas.clave }}</td>
+                    <td style="text-align: center;">{{ datosventas.precioventa }}</td>
+                    <td style="text-align: center;">{{ datosventas.cantEquipo }}</td>
+                    <td style="text-align: center;">{{ datosventas.Importe }}</td>
+                    <td><button {{btngenerar}} type="button" id="eliminarequipo" class="glyphicon glyphicon-trash btn btn-danger remove">Eliminar</button></td>
+                </tr>
+              {% endfor %}
+              {% endif %}
+          </tbody>
+   </table>
+         {# <button type="button" id="calcularventas" class="btn btn-success calculo" style="" onclick=""><span class="glyphicon glyphicon-usd"></span> Calcular</button>#}
+          <br>
+            <label>SubTotal</label>
+            <input type="text" name="" id="sub1" class="form-control" disabled="true">
+            <label>Descuento</label>
+            <input type="text" name="" id="descuento" class="form-control target" value="{{descuento}}" >
+            <label>Costo Entrega</label>
+            <input type="text" name="" id="costoentrega" class="form-control costo" value="{{entrega}}" >
+            <label>SubTotal</label>
+            <input id="sub2" class="form-control" type="text" disabled="true">
+            
+            <br>
+			<label>I.V.A</label>&nbsp;&nbsp;<input type="checkbox" id="chek" {{chek}}>
+            <input type="text" id="iva" class="form-control" placeholder="IVA" disabled="true">
+            <label>Total</label>
+            <input type="text" name="" id="total" class="form-control" placeholder="Total" disabled="true">
+           <br>
+           <div style="text-align: center;">
+             <button id="btn_generar" class="btn btn-success btn-lg" type="button" onclick="ultventa();"{{btngenerar}} >Generar</button>
+             <button id="btn_eliminar_venta" class="btn btn-danger btn-lg" type="button" onclick="eliminarVenta();" {{btneliminar}}>Eliminar</button>
+             <button id="btn_archivar_venta" class="btn btn-warning btn-lg" type="button" onclick="archivarVenta();" {{btnarchivar}}>Archivar</button>
+             <button id="btn_imprimir_venta" class="btn btn-warning btn-lg " type="button" onclick="reporteticket();" {{btnimprimir}}>  Imprimir</button>
+
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+   function reporteticket(){
+      var nroventa=document.getElementById('nroventa').innerHTML;
+     window.open("reporteticket/"+nroventa);
+   }
+ 		$('#tabla_equipos tbody').on('click', '.btn_agregar', function () {
+          	var btn = this;
+            $tr = $(this).closest('tr');
+            var data = $('#tabla_equipos').DataTable().row($tr).data();
+            var valor = $tr.find("#nbcantidad").val();
+            var valor1 = $tr.find("#nbprecio").val();
+            var total=0;
+
+            total=(valor * valor1);
+            if (valor==""){
+            	alert('Debe Colocar la Cantidad');
+            	exit();
+            }
+            if (!/^([0-9])*$/.test(valor)){	
+      	      alert("El valor " + valor + " no es un número");
+		          exit();
+  			    }
+           $('#tabla_equipos_agregados tr').each(function(){
+                    if($tr.find("#nbequipo").val()==$(this).find("td").eq(0).html()){
+                      alert('Este Equipo ya esta Agregado');
+                      exit(); 
+                    }
+           });
+           $('#tabla_equipos_agregados').dataTable().fnAddData([
+                          $tr.find("#nbequipo").val(),
+                          $tr.find("#nbclave").val(),
+                          $tr.find("#nbprecio").val(),
+                          $tr.find("#nbcantidad").val(),
+                          total.toFixed(2),
+                          '<button type="button" id="eliminarequipo" class="glyphicon glyphicon-trash btn btn-danger remove">Eliminar</button>'
+           ]); 
+calcular();
+
+	   });
+
+		$('#tabla_equipos_agregados ').on('click', '.remove', function () {
+            var btn = this;
+            $('#tabla_equipos_agregados').DataTable().row($(btn).parents('tr')).remove().draw(false);
+            calcular();
+		});
+		
+		$('#calcularventas').on('click', function () {
+		  calcular();
+		});
+
+    function calcular(){
+        document.getElementById('sub1').value=0;
+      var descuento=0;
+      var cont=0;
+      var dato
+
+     $('#tabla_equipos_agregados tr').each(function(){
+        if (cont>=1){
+            document.getElementById('sub1').value= parseFloat(document.getElementById('sub1').value) + parseFloat($(this).find("td").eq(4).html());
+            dato=$(this).find("td").eq(4).html();
+        }
+          cont=cont+1
+     });
+     // alert(dato);
+     //  if (dato==0){
+     //    alert('Debe Agregar Equipos a la Tabla para realizar el Cálculo');
+     //    exit();
+     //  }
+     if(document.getElementById('descuento').value!=''){
+     descuento=parseFloat(document.getElementById('sub1').value) * parseFloat(document.getElementById('descuento').value)/100;
+     document.getElementById('sub2').value= (parseFloat(document.getElementById('sub1').value)-parseFloat(descuento)) + parseFloat(document.getElementById('costoentrega').value);
+     }else{
+          document.getElementById('sub2').value= parseFloat(document.getElementById('sub1').value) + parseFloat(document.getElementById('costoentrega').value);
+     }
+        if(document.getElementById('iva').value==''){
+          document.getElementById('total').value=document.getElementById('sub2').value;
+        }else{
+          document.getElementById('total').value=(parseFloat(document.getElementById('sub2').value)) + parseFloat(document.getElementById('iva').value);
+        }
+
+         if(document.getElementById("chek").checked==true){
+          if(document.getElementById('sub2').value==''){
+            alert('Debe Presionar Calcular o Agregar Equipos');
+            document.getElementById("chek").checked=false;
+            exit();
+          }
+            document.getElementById('iva').value= parseFloat(document.getElementById('sub2').value) * parseFloat(0.16);
+            document.getElementById('total').value=(parseFloat(document.getElementById('sub2').value)) + parseFloat(document.getElementById('iva').value);
+         }else{
+          document.getElementById('iva').value='';
+         }
+          if (document.getElementById('total').value=='NaN'){
+            document.getElementById('total').value='';
+            document.getElementById('sub2').value='';
+            document.getElementById('sub1').value='';
+
+          }
+    }
+   $( ".target" ).change(function() {
+  calcular();
+});
+    $( ".costo" ).change(function() {
+  calcular();
+});
+     $('#chek').change(function() {
+       if($(this).prop('checked')==true){
+        if(document.getElementById('sub2').value==''){
+          alert('Debe Presionar Calcular o Agregar Equipos');
+          document.getElementById("chek").checked=false;
+          exit();
+        }
+        var iv=0;
+          document.getElementById('iva').value= (document.getElementById('sub2').value * 0.16);
+          document.getElementById('total').value=(parseFloat(document.getElementById('sub2').value)) + parseFloat(document.getElementById('iva').value);
+       }else{
+        document.getElementById('iva').value='';
+       }
+       calcular();
+     });
+     var vd=0;
+     function ultventa(){
+      if(document.getElementById('total').value==''){
+        alert('Debe Realizar el Cálculo antes de Registrar la Venta');
+        exit();
+      }
+        $("#gif").show(); 
+         $.post("{{ path('ult_venta') }}", {}, function(mensaje) {
+
+            $("#nroventa").show();
+          document.getElementById('nroventa').innerHTML =  mensaje;
+          registrar();
+        $("#gif").hide();
+
+        });
+
+     }
+     function registrar(){
+      
+      if (document.getElementById('inpt_cliente').value=='')
+      {
+        alert('Debe Agregar el Cliente');
+        exit();
+      }
+
+
+          var cont2=0;
+          $('#tabla_equipos_agregados tr').each(function(){
+            if (cont2 >= 1){
+              
+
+              $.post("{{ path('add_venta') }}", {cliente:document.getElementById('inpt_cliente').value,obra:document.getElementById('nombreobra').value,
+                fecha:document.getElementById('fecha1').value,descuento:document.getElementById('descuento').value,entrega:document.getElementById('costoentrega').value,iva:$('#chek').prop('checked'),claveequipo:$(this).find("td").eq(1).html(),cantidad:$(this).find("td").eq(3).html(),nroventa:document.getElementById('nroventa').innerHTML}, function(mensaje) {
+                  document.getElementById('nroventa').innerHTML =  mensaje;
+              });
+            }
+            cont2=cont2+1;
+
+          }); 
+          alert('Venta Registrada');
+          document.getElementById('btn_generar').disabled=true;
+          document.getElementById('btn_eliminar_venta').disabled=false;
+          document.getElementById('btn_archivar_venta').disabled=false;
+          document.getElementById('btn_imprimir_venta').disabled=false;
+
+      }
+
+      function eliminarVenta(){
+        $("#gif").show();
+         $.post("{{ path('delete_venta') }}", {nroventa:document.getElementById('nroventa').innerHTML}, function(mensaje) {
+            alert(mensaje);
+         });
+         var url=("{{ path('nva_venta', { 'id': 0 }) }}");
+        $.ajax({
+            dataType: "html",
+            url: url,
+            type: "GET",
+            success: function(data)
+            {
+             location.href=url;   
+            }
+        });   
+
+      }
+      function archivarVenta(){
+        $('#tabla_equipos_agregados tr').each(function(){
+          $("#gif").show();
+
+           $.post("{{ path('archivar_venta') }}", {cliente:document.getElementById('inpt_cliente').value,obra:document.getElementById('nombreobra').value,
+                fecha:document.getElementById('fecha1').value,descuento:document.getElementById('descuento').value,entrega:document.getElementById('costoentrega').value,iva:$('#chek').prop('checked'),claveequipo:$(this).find("td").eq(1).html(),cantidad:$(this).find("td").eq(3).html(),nroventa:document.getElementById('nroventa').innerHTML}, function(mensaje) {
+
+            
+
+         });
+        });
+        var url=("{{ path('nva_venta', { 'id': 0 }) }}");
+        $.ajax({
+            dataType: "html",
+            url: url,
+            type: "GET",
+            success: function(data)
+            {
+             location.href=url;   
+            }
+        });   
+
+      }
+
+  </script>
+  <div class="modal fade" id="clientes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+   <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+         <h4 class="modal-tittle" style="text-align: center; color: #ffffff;"><span class="glyphicon glyphicon-user"></span> Seleccionar Cliente</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+             <script type="text/javascript">
+           $("#gif").show();
+         </script>
+            <table id="tabla_clientes"  class="display" style="width:100%;height: 15px;">
+              <thead>
+                 <tr >
+                   <th style="text-align: center;">Cliente</th>
+                   <th style="text-align: center;">Domicilio</th>
+                   <th style="text-align: center;">Obra</th>
+                   <th style="text-align: center;">Acción</th>
+               </tr>
+             </thead>
+             <tbody>
+                {% for clientes in clientes %}
+                  <tr>
+                      <td style="text-align: center;">{{ clientes.razon_social }}<input id="idcliente" type="text" name="" value="{{ clientes.razon_social }}" hidden="hidden"></td>
+                      <td style="text-align: center;">{{ clientes.domicilio }}</td>
+                      <td style="text-align: center;">{{ clientes.cuenta_id }}<input id="idobra" type="text" name="" value="{{ clientes.cuenta_id }}" hidden="hidden" ></td>
+                      <td><button class="btn btn-success btn-sm btn_agregar_cliente" type="button"> <span class="glyphicon glyphicon-plus"></span>  Agregar</button></td>
+                  </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+             <script type="text/javascript">
+           $("#gif").hide();
+         </script>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+   $('#tabla_clientes tbody').on('click', '.btn_agregar_cliente', function () {
+      var btn = this;
+      $tr = $(this).closest('tr');
+      var data = $('#tabla_clientes').DataTable().row($tr).data();
+       document.getElementById('inpt_cliente').value= $tr.find("#idcliente").val();
+       document.getElementById('nombreobra').value= $tr.find("#idobra").val();
+       $('#clientes').modal('hide');
+    });   
+</script>
+{% endblock %}

@@ -1,0 +1,80 @@
+detalles_clientes:
+    path:     /clientes
+    defaults: { _controller: "GestionBundle:Clientes:detalles" }
+    methods:  [POST, GET]
+detalles_clientes2:
+    path:     /clientes2
+    defaults: { _controller: "GestionBundle:Clientes:detalles2" }
+    methods:  [POST, GET]
+add_clientes:
+    path:     /add
+    defaults: { _controller: "GestionBundle:Clientes:add" }
+    methods:  [POST, GET]
+buscar_clientes:
+    path:     /clientes/search
+    defaults: { _controller: "GestionBundle:Clientes:buscarcientes" }
+    methods:  [POST, GET]
+editarcliente:
+    path:     /edit/{id}
+    defaults: { _controller: "GestionBundle:Clientes:edit" }
+    methods:  [POST, GET]
+guardarcliente:
+    path:     /editclientes
+    defaults: { _controller: "GestionBundle:Clientes:editarclientes" }
+    methods:  [POST, GET]
+guardarobras:
+    path:     /editobras
+    defaults: { _controller: "GestionBundle:Clientes:editarobras" }
+    methods:  [POST, GET]
+addobras:
+    path:     /add/obras
+    defaults: { _controller: "GestionBundle:Clientes:addobras" }
+    methods:  [POST, GET]
+eliminarobras:
+    path:     /eliminar/obras
+    defaults: { _controller: "GestionBundle:Clientes:eliminarobras" }
+    methods:  [POST, GET]
+desactivarcliente:
+    path:     /desactivarcliente/{id}
+    defaults: { _controller: "GestionBundle:Clientes:desactivarcliente" }
+    methods:  [POST, GET]
+filtros_clientes:
+    path:     /flt
+    defaults: { _controller: "GestionBundle:Clientes:filtrar" }
+    methods:  [POST, GET]
+registro_clientes:
+    path:     /reg
+    defaults: { _controller: "GestionBundle:Clientes:registrar" }
+    methods:  [POST, GET]
+registro_cuenta:
+    path:     /regcuenta
+    defaults: { _controller: "GestionBundle:Clientes:registrarcuenta" }
+    methods:  [POST, GET]
+consultar_cuenta:
+    path:     /consl
+    defaults: { _controller: "GestionBundle:Clientes:consultarcuenta" }
+    methods:  [POST, GET]
+detalles_cuenta:
+    path:     /detallescta
+    defaults: { _controller: "GestionBundle:Clientes:detallescuenta" }
+    methods:  [POST, GET]
+modificar_cuenta:
+    path:     /modificarcta
+    defaults: { _controller: "GestionBundle:Clientes:modificarcta" }
+    methods:  [POST, GET]
+modf_cliente:
+    path:     /restrcliente
+    defaults: { _controller: "GestionBundle:Clientes:modfcliente" }
+    methods:  [POST, GET]
+modificar_detalles:
+    path:     /dt
+    defaults: { _controller: "GestionBundle:Clientes:modificardetalles" }
+    methods:  [POST, GET]
+id_detalles:
+    path:     /idcl
+    defaults: { _controller: "GestionBundle:Clientes:id" }
+    methods:  [POST, GET]
+llenardatalist:
+    path:     /llenardt
+    defaults: { _controller: "GestionBundle:Factura:llenardt" }
+    methods:  [POST, GET]

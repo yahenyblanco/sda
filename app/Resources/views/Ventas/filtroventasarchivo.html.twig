@@ -1,0 +1,275 @@
+ {% extends 'menu/menu.html.twig' %}
+ {% block estilos %}
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></link>
+  <link rel="stylesheet" href="/resources/demos/style.css"></link>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="mdtimepicker.js"></script>
+
+
+ <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<style type="text/css">
+	#tabla_clientes_filter label{
+  display: none;
+}
+	.modal-dialog {
+	     width: 50%;
+	  }
+ 
+.modal-header {
+    background-color: #7EC820;
+    padding:16px 16px;
+    color:#FFF;
+    border-bottom:2px dashed #7EC820;
+ }
+ [for="busquedapersonal"] { display: block !important;}
+.dataTables_wrapper .dataTables_filter{
+  float: left !important;
+  text-align: left !important;
+  width: 30em !important;
+}
+tr{
+	text-align: center;
+	color: green;
+}
+table th {
+
+  background-color: white;
+  font-size: 16px;
+   }
+table tr:nth-child(odd) {background-color:   #F5F5F5;}
+table tr:nth-child(even) {background-color: #ADD8E6;}
+
+table{
+	
+  width: 1000px;
+
+}
+#div1 {
+     overflow:scroll;
+     height:350px;
+     width: 1025px;
+     margin: auto;
+}
+</style>
+  {%endblock%}
+
+{% block body %}
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#tabla_clientes').DataTable( {
+	                  "bLengthChange":false,
+	                  "bFilter":true,
+	                  "bInfo":false,
+	                  "bAutoWidth":false,
+	                  "pageLength": 4,
+	              "language": {
+	                  "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+	              },
+	              initComplete: function () {
+	                var div=$("#tabla_clientes_wrapper");
+	                div.find("#tabla_clientes_filter").prepend("<label for='busquedapersonal'>Buscar  <input type='text' id='busqueda3'  name='busqueda3' placeholder='Cliente a Buscar'></label>");
+	              this.api().columns(0).every( function () {
+	                var column = this;
+	                
+	                    $("#busqueda3").on( 'keyup change', function () {
+	                        if ( column.search() !== this.value ) {
+	                                        column
+	                                            .search( this.value )
+	                                            .draw();
+	                                    }
+	                    });
+	                });
+	          },
+	      
+	        
+	      });
+	});
+  $( function() {
+       $.datepicker.regional['es'] = {
+            closeText: 'Cerrar',
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+            dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+      };
+    $.datepicker.setDefaults($.datepicker.regional['es']);
+    $("#fecha1").datepicker();
+    $("#fecha2").datepicker();
+  });
+
+function reportet(){
+$("#tbla").on("click", "td" , function(){
+        var celda = $(this);
+        nroventa = $(this).parents("tr").find("td").eq(1).html();
+        // if(celda.html()=='Ver Ticket'){
+
+        //   reporteticket(nroventa);
+        //   exit();
+        // }
+
+      var vta = $(this).parents("tr").find("td").eq(1).html();
+      
+      var url=("{{ path('nva_venta', { 'id': 0 }) }}");
+         url = url.replace("0", vta);
+        $.ajax({
+            dataType: "html",
+            url: url,
+            type: "GET",
+            data: {id: vta},
+            success: function(data)
+            {
+             location.href=url;   
+            }
+        });   
+
+
+});
+}
+  function generar(){
+	 $("#tbla").empty();
+    $("#tbla").append("<tr class='dev'><td style='text-align: center' color:'blue';>SELECCIONAR</td><td style='text-align: center' color:'blue';>VENTA</td><td style='text-align: center' color:'blue';>CLIENTE</td><td style='text-align: center' color:'blue';>OBRA</td><td style='text-align: center' color:'blue';>FECHA</td></tr>");
+   var nvent=0;
+   $('.loader').show();
+  	 $.post("{{ path('generar_filtro_archivo') }}",{nroventa:document.getElementById('nroventa').value,fecha_desde:document.getElementById('fecha1').value,fecha_hasta:document.getElementById('fecha2').value,cliente:document.getElementById('cliente').value}, function(mensaje) {
+      $('.loader').hide();
+	      for (var i=0, total = mensaje.length; i < total; i++) {
+	      	if(nvent != mensaje[i]["nroVenta"]){
+	           $("#tbla").append("<tr class='dev' id='fila1'><td ><input id='chekid' type='checkbox' value="+mensaje[i]["nroVenta"]+" name='chek1' onclick=activarcasilla(this)></td><td style='text-align: center; color:blue; text-decoration: underline; cursor:pointer;' onclick='reportet();'>"+mensaje[i]["nroVenta"]+"</td><td style='text-align: center'>"+mensaje[i]["cliente"]+"</td><td style='text-align: center'>"+mensaje[i]["cuenta_id"]+"</td><td style='text-align: center'>"+mensaje[i]["Fecha"]+"</td></tr>");
+	      }
+        nvent=mensaje[i]["nroVenta"];
+      }
+      });
+
+  }
+  function limpiar(){
+  	document.getElementById('cliente').value='';
+  	document.getElementById('fecha1').value='';
+  	document.getElementById('fecha2').value='';
+  	document.getElementById('nroventa').value='';
+  	document.getElementById('btn_archivar').disabled=true;
+  }
+// function archivar(){
+// 	$("input[name=chek1]").each(function () { 
+// 	   if($(this).is(':checked')){
+// 	   	var nrovt=($(this).val())
+//            $.post("{{ path('datos_venta') }}", {nroventa:nrovt}, function(mensaje) {
+// 	       	for (var i=0, total = mensaje.length; i < total; i++) {
+	        		
+// 	        	 $.post("{{ path('archivar_venta') }}", {cliente:mensaje[i]["idCliente"],obra:mensaje[i]["idCuenta"],
+// 	                fecha:mensaje[i]["fecha"],descuento:mensaje[i]["descuento"],entrega:mensaje[i]["costoEntrega"],iva:mensaje[i]["iva"],claveequipo:mensaje[i]["idEquipo"],cantidad:mensaje[i]["cantEquipo"],nroventa:nrovt}, function(mensaje) {
+// 		         });
+// 		        }
+// 		     });
+// 	     }
+// 	 });
+// }
+function activarcasilla(check){
+
+	if(check.checked==true){
+		document.getElementById('btn_archivar').disabled=false;
+	}else{
+		document.getElementById('btn_archivar').disabled=true;
+	}
+ }
+
+  </script>
+  <div class="alert alert-info alert-dismissible" role="alert" style="height: 50px;">
+  		<marquee><p style="font-family: Impact; font-size: 18pt; margin-top: -0.5%;">CONSULTAR VENTAS ARCHIVADAS</p></marquee>
+  </div>
+	<div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab" style="" align="center">
+        <div class="col-md-4"  style="margin-top: 1%;">
+          <div class="panel panel-default">
+           <div class="panel-body" style="background-color: #87CEEB;">
+          <div class="panel-heading" style="text-align: center; color: green; font-size: 170%;"><span class="glyphicon glyphicon-stats"></span>  Buscar Por:</div>
+          	<label style="font-size: 150%;">Nro.Venta</label>
+             <input id="nroventa" class="form-control" type="text" >
+           	 <label style="font-size: 150%;">Desde</label>
+             <input id="fecha1" class="form-control" type="text" >
+             <label style="font-size: 150%;">Hasta</label>
+             <input id="fecha2" class="form-control" type="text" >
+             <label style="font-size: 150%;">Cliente: </label><button style="margin-top: -0.9%;" type="button" id="actualizarhorario" class="btn btn-success btn-xs glyphicon glyphicon-search" data-toggle="modal" data-target="#clientes" data-whatever="@getbootstrap"></button>
+             <input id="cliente" class="form-control" type="text" >
+           	<br>
+             <button class="btn btn-success btn_generar" onclick="generar();"> <span class=""></span>  Generar</button>
+             <button class="btn btn-success btn_limpiar" onclick="limpiar();"> <span class=""></span>  Limpiar</button>
+           </div>
+       </div>
+   </div>
+</div>
+	<div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab" style="" align="center">
+        <div class="col-md-8"  style="margin-top: 1%;">
+          <div class="panel panel-default">
+           <div class="panel-body" style="background-color: #87CEEB;">
+           	<h3 style="text-align: center;">RESULTADOS DE BUSQUEDA</h3>
+           	<div id="div1" style="height: 280px;" class="table table-dark">
+			  <table id="tbla" width="100%" align="center" class="table">
+			     <tr id="consul_pedido" align="center" style="color: green;">
+			     	<th style="text-align: center;">Seleccionar</th>
+			         <th style="text-align: center;">Venta</th>
+			         <th style="text-align: center;">Cliente</th>
+			         <th style="text-align: center;">Obra</th>
+			         <th style="text-align: center;">Fecha</th>
+			     </tr>
+			  </table>  
+			</div>
+			<br>
+
+           </div>
+       </div>
+   </div>
+</div>
+<div class="modal fade" id="clientes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+   <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+         <h4 class="modal-tittle" style="text-align: center; color: #ffffff;"><span class="glyphicon glyphicon-user"></span> Seleccionar Cliente</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            
+            <table id="tabla_clientes"  class="display" style="width:100%;height: 15px;">
+              <thead>
+                 <tr >
+                   <th style="text-align: center;">Cliente</th>
+                   <th style="text-align: center;">Domicilio</th>
+                   <th style="text-align: center;">Obra</th>
+                   <th style="text-align: center;">Acción</th>
+               </tr>
+             </thead>
+             <tbody>
+                {% for clientes in clientes %}
+                  <tr>
+                      <td style="text-align: center;">{{ clientes.razon_social }}<input id="idcliente" type="text" name="" value="{{ clientes.razon_social }}" hidden="hidden"></td>
+                      <td style="text-align: center;">{{ clientes.domicilio }}</td>
+                      <td style="text-align: center;">{{ clientes.cuenta_id }}<input id="idobra" type="text" name="" value="{{ clientes.cuenta_id }}" hidden="hidden" ></td>
+                      <td><button class="btn btn-success btn-sm btn_agregar_cliente" type="button"> <span class="glyphicon glyphicon-plus"></span>  Agregar</button></td>
+                  </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

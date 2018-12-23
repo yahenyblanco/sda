@@ -1,0 +1,40 @@
+reportes_inicio:
+    path:     /rpt
+    defaults: { _controller: "GestionBundle:Pedidos:rptinicio" }
+    methods:  [GET, POST]
+filtros_rptped:
+    path:     /fltrptped
+    defaults: { _controller: "GestionBundle:Pedidos:filtroped" }
+    methods:  [GET, POST]
+sql_ped:
+    path:     /sqlpd/{cliente}/{cuenta}/{hasta}/{desde}/{folio}/{pedido}
+    defaults: { _controller: "GestionBundle:Pedidos:sqlped" }
+    methods:  [GET, POST]
+reportes_saldos:
+    path:     /rptsaldos
+    defaults: { _controller: "GestionBundle:Factura:rptsaldo" }
+    methods:  [GET, POST]
+filtros_rptsaldo:
+    path:     /filtrosaldo
+    defaults: { _controller: "GestionBundle:Factura:filtrosaldo" }
+    methods:  [GET, POST]
+sql_rptsaldo:
+    path:     /sqlsaldo/{cliente}/{cuenta}/{fechadesde}/{fechahasta}/{tipofecha}
+    defaults: { _controller: "GestionBundle:Factura:sqlsaldo" }
+    methods:  [GET, POST]
+imprimir_general:
+    path:     /impr/{desde}/{hasta}/{cliente}/{cuenta}
+    defaults: { _controller: "GestionBundle:Recolecciones:filtrogeneral" }
+    methods:  [POST, GET]
+imprimir_cotizacion:
+    path:     /imprcot/{cuenta}/{cliente}/{desde}/{hasta}/{cotizacion}
+    defaults: { _controller: "GestionBundle:Pedidos:imprimircot" }
+    methods:  [POST, GET]
+imprimirdevolucion:
+    path:     /rptdev/{pedido}/{folio}/{desde}/{hasta}
+    defaults: { _controller: "GestionBundle:DetallesDevoluciones:imprimirdevolucion" }
+    methods:  [POST, GET]
+imprimirpagos:
+    path:     /rptpago/{pedido}/{folio}/{fechadesde}/{fechahasta}/{cliente}/{obra}
+    defaults: { _controller: "GestionBundle:Factura:imprimirpago" }
+    methods:  [POST, GET]

@@ -1,0 +1,56 @@
+nva_venta:
+    path:     /ventasdetalles/{id}
+    defaults: { _controller: "GestionBundle:Ventas:homeventas" }
+    methods:  [GET, POST]
+add_equipos:
+    path:     /addequipos
+    defaults: { _controller: "GestionBundle:Ventas:addequipos" }
+    methods:  [GET, POST]
+add_venta:
+    path:     /addventa
+    defaults: { _controller: "GestionBundle:Ventas:addventa" }
+    methods:  [GET, POST]
+ult_venta:
+    path:     /ultventa
+    defaults: { _controller: "GestionBundle:Ventas:ultVenta" }
+    methods:  [GET, POST]
+delete_venta:
+    path:     /deleteventa
+    defaults: { _controller: "GestionBundle:Ventas:deleteVentas" }
+    methods:  [GET, POST]
+archivar_venta:
+    path:     /archivarventa
+    defaults: { _controller: "GestionBundle:Ventas:archivarVenta" }
+    methods:  [GET, POST]
+filtros_venta:
+    path:     /filtventa
+    defaults: { _controller: "GestionBundle:Ventas:filtrosventa" }
+    methods:  [GET, POST]
+generar_filtro:
+    path:     /generarfiltro
+    defaults: { _controller: "GestionBundle:Ventas:generarfiltro" }
+    methods:  [GET, POST]
+generar_filtro_archivo:
+    path:     /generarfiltroarch
+    defaults: { _controller: "GestionBundle:Ventas:Generarfiltroarchivo" }
+    methods:  [GET, POST]
+datos_venta:
+    path:     /dtsventa
+    defaults: { _controller: "GestionBundle:Ventas:datosventa" }
+    methods:  [GET, POST]
+datosventaarchivo:
+    path:     /dtsventaarch
+    defaults: { _controller: "GestionBundle:Ventas:datosventaarchivo" }
+    methods:  [GET, POST]
+archivo_filtro_ventas:
+    path:     /filtventaarchivo
+    defaults: { _controller: "GestionBundle:Ventas:archivarventafiltro" }
+    methods:  [GET, POST]
+imprimir_venta_ticket:
+    path:     /ventasdetalles/reporteticket/{nroventa}
+    defaults: { _controller: "GestionBundle:Ventas:reporteticket" }
+    methods:  [POST, GET]
+imprimir_venta_ticket2:
+    path:     /ventas/reporteticket/{nroventa}
+    defaults: { _controller: "GestionBundle:Ventas:reporteticket" }
+    methods:  [POST, GET]

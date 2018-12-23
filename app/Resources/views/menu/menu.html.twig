@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, user- scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1">
+   <Link rel="stylesheet" href="{{ asset('css/fontello.css')}}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+      {% block javascripts %}
+
+        {% endblock %}
+{% block estilos %}
+   {% endblock %}
+
+</head>
+<style type="text/css">
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
+  header{
+    height: 40px;
+    background:#87CEEB;
+    color: #fff;
+    display: block;
+    margin: auto;
+
+  }
+  #btn-menu{
+    display: none;
+  }
+  header label{
+    font-size: 30px;
+    cursor: pointer;
+    display: none;
+
+  }
+  .menu ul{
+    background: #87CEEB;
+    display: flex;
+    list-style: none;
+
+  }
+  .menu ul ul{
+    display: none;
+
+  }
+.menu a{
+  display: block;
+  padding: 5px 30px;
+  color: #fff;
+  text-decoration: none;
+}
+.menu a:hover{
+  background-color: rgba(0,0,0,0.3);
+}
+.menu a span{
+  margin-left: 10px;
+}
+
+.menu ul li:hover ul{
+  display: block;
+  position: absolute;
+}
+ .loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('{{ asset('img/cargando3.gif')}}') 50% 50% no-repeat rgb(24, 25, 25);
+    opacity: .9;
+    text-align: center;
+
+}
+
+/*.mostrar{
+  display: none;
+}*/
+</style>
+<body>
+  <div class="loader" id="gif" style="display: none;"><span style="color: white; font-size: 260%;">Por Favor, Espere unos Segundos...</span></div>
+  <header>
+    <nav class="menu" >
+      <ul>
+        <li><a href="{{ path('inicio_detalles')}}">Home<span class="glyphicon glyphicon-home"></span></a></li>
+        <li class="submenu"><a href="#">Operaciones<span class="glyphicon glyphicon-chevron-down"></span></a>
+          <ul>
+            <li><a href="{{ path('pedidos_detalles', { 'id': 0 }) }}">Nueva Renta/Cotización</a></li>
+            <li><a href="{{ path('nva_venta', { 'id': 0 }) }}">Nueva Venta</a></li>
+            <li><a href="{{ path('consultas_pedidos') }}">Buscar Rentas</a></li>
+            <li><a href="{{ path('busqueda_rapida') }}">Búsqueda Rápida de Rentas</a></li>
+            <li><a href="{{ path('filtros_venta') }}">Buscar Ventas</a></li>
+            <li><a href="{{ path('busqueda_avanzada') }}">Búsqueda Avanzada V2 </a></li>
+          </ul>
+        </li>
+        <li><a href="#">Consultas <span class="glyphicon glyphicon-chevron-down"></span></a>
+           <ul>
+            <li><a href="{{ path('reportes_saldos') }}">Consultas Generales</a></li>
+          </ul>
+         </li>
+          <li><a href="">Panel de Control<span class="glyphicon glyphicon-chevron-down"></span></a>
+              <ul>
+                <li><a href="{{ path('detalles_clientes2') }}">Clientes </a></li>
+                <li><a href="{{ path('detalles_clientes') }}">Clientes BETA</a></li>
+                <li><a href="{{ path('detalles_catalogo') }}">Catálogos</a></li>
+                <li><a href="{{ path('detalles_usuarios') }}">Usuarios</a></li>
+                  <li><a href="{{ path('usuario_conf') }}">Mi Perfil</a></li>
+
+              </ul>
+         </li>
+          <li><a href="">Archivo<span class="glyphicon glyphicon-chevron-down"></span></a>
+              <ul>
+                <li><a href="{{ path('tabla_archivos') }}">Rentas Archivadas</a></li>
+                <li><a href="{{ path('archivo_filtro_ventas') }}">Ventas Archivadas</a></li>
+              </ul>
+         </li>
+
+         <li><a href="{{ path('usuario_logout')}}">Cerrar Sesión <span class="glyphicon glyphicon-log-in"></span></a></li>
+      </ul>
+    </nav>
+  </header>
+<div>
+      <img style="display:block;margin: auto; width: 13%; margin-top: 0.3%; " class="logo" src="{{ asset('img/logo.bmp')}}">   
+      </div>
+    
+</body>
+ {%block body%}
+{%endblock%}
+
+{% block addscript %}
+  
+{% endblock %}
+</html>

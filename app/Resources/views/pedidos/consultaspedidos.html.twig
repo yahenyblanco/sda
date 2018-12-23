@@ -1,0 +1,537 @@
+ {% extends 'menu/menu.html.twig' %}
+ {% block estilos %}
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></link>
+  <link rel="stylesheet" href="/resources/demos/style.css"></link>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="mdtimepicker.js"></script>
+            <Link rel="stylesheet" href="{{ asset('css/conslpedido.css')}}">
+            
+            <script type="text/javascript">
+              var pedido=0;
+              var data2='';
+              
+              var recfecha='';
+var pedidotabla=0;
+              $(document).ready(function() {
+                
+   $("#tbla").on("click", "td" , function(){
+        var celda = $(this);
+        pedidotabla = $(this).parents("tr").find("td").eq(0).html();
+        //alert(pedidotabla);
+        if(celda.html()=='Ver Ticket'){
+
+          reporteticket(pedidotabla)
+        }
+});
+                var totaldiff=0;
+                
+                $('#clt').on('input', function() {
+                  var userText = $(this).val();
+                  limpiar();
+                  $("#categoryname").find("option").each(function() {
+                    if ($(this).val() == userText) {
+                      validar();
+                    }
+                  })
+                })
+
+                $("input[name=statu]").change(function() {
+                    var value2=$("input[name=statu]").val();
+                        data2=$('#categorynamestatus [value="' + value2 + '"]').data('id');
+                  });
+
+                 $("#rdped").change(function(){
+                  var radios= $('input:radio[name=rap]:checked').val();
+                    $("#lblst").show();
+                    $("#status").show();
+                    $("#lbldev").show();
+                    $("#fechadevdesde").show();
+                    $("#lblhasta1").show();
+                    $("#fechadevhasta").show();
+                    $("#lblrecdesde").hide();
+                    $("#lblrechasta").hide();
+                    $("#fecharecdesde").hide();
+                    $("#fecharechasta").hide();
+
+                });
+                 $("#rdrec").change(function(){
+                  var radios= $('input:radio[name=rap]:checked').val();
+                    $("#lblst").hide();
+                    $("#status").hide();
+                    $("#lbldev").hide();
+                    $("#fechadevdesde").hide();
+                    $("#lblhasta1").hide();
+                    $("#lblrecdesde").show();
+                    $("#lblrechasta").show();
+                    $("#fechadevhasta").hide();
+                    $("#fecharecdesde").show();
+                    $("#fecharechasta").show();
+
+                 });
+              });
+
+               
+             
+              function limpiar() {
+              if (document.getElementById('clt').value=='') {
+                    clienterz='';
+                    var sel = document.getElementById("combocta");
+                    sel.remove(sel.selectedIndex);
+                   }
+              }
+              function filtrar() {
+               
+               
+                var radios= $('input:radio[name=rap]:checked').val();
+                if (radios==undefined){
+                  alert('Debe seleccionar una de las dos Opciones para generar el Filtro');
+                  exit();
+                }
+                
+
+
+                var pedido= document.getElementById('pedido').value;
+                var folio= document.getElementById('folio').value;
+                var cuenta= document.getElementById('combocta').value;
+                var cliente= document.getElementById('clt').value;
+                var hasta= document.getElementById('hasta').value;
+                var desde= document.getElementById('desde').value;
+                var hastadev= document.getElementById('fechadevhasta').value;
+                var desdedev= document.getElementById('fechadevdesde').value;
+                var imagen='';
+                var imagen2='';
+                var hoy = new Date();
+                var dd = hoy.getDate();
+                var mm = hoy.getMonth()+1;
+                var yyyy = hoy.getFullYear();
+
+                if(dd<10) {
+                    dd='0'+dd;
+                } 
+                if(mm<10) {
+                    mm='0'+mm;
+                } 
+ 
+                hoy = dd+'/'+mm+'/'+yyyy;
+
+                if (radios=='1'){
+                  $("#tbla").empty();
+                   $("#tbla").append("<tr class='dev'><td style='text-align: center' color:'blue';>PEDIDO</td><td style='text-align: center' color:'blue';>FOLIO</td><td style='text-align: center' color:'blue';>CLIENTE</td><td style='text-align: center' color:'blue';>OBRA</td><td style='text-align: center' color:'blue';>CREADO</td><td style='text-align: center' color:'blue';>DEVOLUCION</td><td style='text-align: center' color:'blue';>STATUS PEDIDO</td><td style='text-align: center' color:'blue';>STATUS PAGO</td><td style='text-align: center' color:'blue';>SEMAFORO PEDIDO</td><td style='text-align: center' color:'blue';>SEMAFORO PAGO</td></tr>");
+                  $('.loader').show();
+                  $.post("{{ path('clt_pedidos') }}",{status:data2,pedido:pedido,folio:folio,cuenta:cuenta,cliente:cliente,hasta:hasta,desde:desde,hastadev:hastadev,desdedev:desdedev},
+                     function(mensaje) {
+
+                      $(".loader").hide();
+                      $("#tbla").find("tr:gt(0)").remove();
+                      $("#pedido").html(mensaje);
+                      var pedidocnt='';
+                        for (var i=0, total = mensaje.length; i < total; i++) {
+                          if(pedidocnt!=mensaje[i]["pedido"]){
+                            imagen='';
+                            fecha1hoy = (hoy.substring(6,10)+ '/' + hoy.substring(3,6) +  hoy.substring(0,2));
+                            fecha2dev = (mensaje[i]["devolucion"].substring(6,10)+ '/' + mensaje[i]["devolucion"].substring(3,6) +  mensaje[i]["devolucion"].substring(0,2));
+                             mydate1 = new Date(fecha1hoy);
+                             day1 = mydate1.getDate();
+                             month1 = mydate1.getMonth()+1;
+                             year1 = mydate1.getFullYear();
+                            if(month1 <= 9){
+                                month1 = '0'+month1;
+                              }
+                            if(day1 <= 9){ 
+                             day1 = '0'+day1;
+                            }
+                          }
+
+
+                      var mydate2 = new Date(fecha2dev);
+                      var day2 = mydate2.getDate();
+                      var month2 = mydate2.getMonth()+1;
+                      var year2 = mydate2.getFullYear();
+                         if(month2 <= 9){
+                              month2 = '0'+month2;
+                            }
+                            if(day2 <= 9){ 
+                            day2 = '0'+day2;
+                          }
+                      var fec1= year1+"-"+month1+"-"+day1;
+                      var fec2= year2+"-"+month2+"-"+day2;
+
+                      var fecha1 = new Date(fec1.substring(0,4)+ '-' + fec1.substring(5,7) + '-' + fec1.substring(8,10));
+                      var fecha2 = new Date(fec2.substring(0,4)+ '-' + fec2.substring(5,7) + '-' + fec2.substring(8,10));       
+                      var diferencia = 0;
+                      if(fecha2.valueOf()>fecha1.valueOf()){
+                        diferencia = fecha2.valueOf()-fecha1.valueOf();
+                      }else{
+                        diferencia = fecha1.valueOf()-fecha2.valueOf();
+                      }
+                     totaldiff= Math.round(diferencia/(1000*60*60*24));
+                     totaldiff= parseInt(totaldiff);
+
+                    if (mensaje[i]["statussaldos"]=='Pagado'){
+                      imagen2="'<img height='50' width='50' src='{{ asset('img/azul.png')}}'/>'";
+                    }
+                    if (mensaje[i]["status"]=='Devuelto'){
+                      imagen="'<img height='50' width='50' src='{{ asset('img/azul.png')}}'/>'";
+                    }
+                    if(mensaje[i]["statussaldos"]=='Debe'){
+                      if (totaldiff<=15){
+                        imagen2="'<img height='50' width='50' src='{{ asset('img/amarillo.png')}}'/>'";
+                      }
+                      if (totaldiff>15 && totaldiff<=30){
+                        imagen2="'<img height='50' width='50' src='{{ asset('img/naranja.png')}}'/>'";
+                      }
+                      if (totaldiff>=30){
+                        imagen2="'<img height='50' width='50' src='{{ asset('img/rojo.png')}}'/>'";
+                      }
+                      }
+                      if (mensaje[i]["status"]=='Pendiente en Devolver'){
+                        if(fecha1>=fecha2){
+                           if (totaldiff<=15){
+                              imagen="'<img height='50' width='50' src='{{ asset('img/amarillo.png')}}'/>'";
+                           }
+                           if (totaldiff>15 && totaldiff<=30){
+                                imagen="'<img height='50' width='50' src='{{ asset('img/naranja.png')}}'/>'";
+                           }
+                           if (totaldiff>=30){
+                                imagen="'<img height='50' width='50' src='{{ asset('img/rojo.png')}}'/>'";
+                           }
+                        }else{
+                            imagen="'<img height='50' width='50' src='{{ asset('img/verde.png')}}'/>'"; 
+                          }
+                      } 
+
+                      if (mensaje[i]["status"]=='En Renta'){
+                         imagen="'<img height='50' width='50' src='{{ asset('img/verde.png')}}'/>'";
+                      if(mensaje[i]["statussaldos"]=='Debe'){
+                        imagen2="'<img height='50' width='50' src='{{ asset('img/verde.png')}}'/>'";
+                      }            }
+                      if (mensaje[i]["status"]=='Completado'){
+                          imagen="'<img height='50' width='50' src='{{ asset('img/azul.png')}}'/>'";
+                        if(mensaje[i]["statussaldos"]=='Pagado'){
+                          imagen="'<img height='50' width='50' src='{{ asset('img/azul.png')}}'/>'";
+                        }
+                      }
+
+                  if(fecha1>=fecha2){
+                      if (mensaje[i]["status"]=='Pendiente en Devolver'){
+                          if(mensaje[i]["statussaldos"]=='Pagado'){
+                            imagen2="'<img height='50' width='50' src='{{ asset('img/verde.png')}}'/>'";
+                          }
+                          if(mensaje[i]["statussaldos"]=='Pagado' && totaldiff>1 ){
+                            imagen2="'<img height='50' width='50' src='{{ asset('img/azul.png')}}'/>'";
+                          }
+                          if(mensaje[i]["statussaldos"]=='Debe'){
+                            if (totaldiff<=15){
+                                imagen2="'<img height='50' width='50' src='{{ asset('img/amarillo.png')}}'/>'";
+                          }
+                           if (totaldiff>15 && totaldiff<=30){
+                                imagen2="'<img height='50' width='50' src='{{ asset('img/naranja.png')}}'/>'";
+                          }
+
+                           if (totaldiff>=30){
+                                imagen2="'<img height='50' width='50' src='{{ asset('img/rojo.png')}}'/>'";
+                          }
+                        }
+                      }
+                  }else{
+                      imagen2="'<img height='50' width='50' src='{{ asset('img/verde.png')}}'/>'";
+                   }
+                 //}
+                 if(pedidocnt!=mensaje[i]['pedido']){
+                  $("#tbla").append("<tr class='dev'><td style='text-align: center; color:blue; text-decoration: underline; cursor:pointer;' onclick='detallespedido();'>"+mensaje[i]["pedido"]+"</td><td style='text-align: center'>"+mensaje[i]["folio"]+"</td><td style='text-align: center'>"+mensaje[i]["cliente"]+"</td><td style='text-align: center'>"+mensaje[i]["cuenta"]+"</td><td style='text-align: center'>"+mensaje[i]["fecha"]+"</td><td style='text-align: center'>"+mensaje[i]["devolucion"]+"</td><td style='text-align: center'>"+mensaje[i]["status"]+"</td><td style='text-align: center'>"+mensaje[i]["statussaldos"]+"</td><td style='text-align: center'>"+ imagen+"</td><td style='text-align: center'>"+ imagen2+"</td></tr>");
+                  }
+                  pedidocnt=mensaje[i]['pedido'];
+               }
+            });
+
+
+          }else{
+            var fecrec=''
+            $("#tbla").empty();
+            var pedidocnt2='';
+            $('.loader').show();
+            $.post("{{ path('filtros_generales') }}",{pedido:pedido,folio:folio,cuenta:cuenta,cliente:cliente,hasta:hasta,desde:desde,fecha_recoleccionhasta:document.getElementById("fecharechasta").value,fecha_recolecciondesde:document.getElementById("fecharecdesde").value},
+                function(mensaje) {
+                  $('.loader').hide();
+                   $("#tbla").append("<tr class='dev'><td style='text-align: center' color:'blue';>PEDIDO</td><td style='text-align: center' color:'blue';>FOLIO</td><td style='text-align: center' color:'blue';>CLIENTE</td><td style='text-align: center' color:'blue';>OBRA</td><td style='text-align: center' color:'blue';>CREADO</td><td style='text-align: center' color:'blue';>DEVOLUCION</td><td style='text-align: center' color:'blue';>FECHA RECOLECCION</td><td style='text-align: center' color:'blue';>IMPRESION RAPIDA</td></tr>");
+                   for (var i=0, total = mensaje.length; i < total; i++) {
+                    if(pedidocnt2!=mensaje[i]["Pedido"]){
+                    if(mensaje[i]["Fecha_Recoleccion"]=='00/00/0000'){
+                      fecrec='Sin Asignar';
+                    }else{
+                      fecrec=mensaje[i]["Fecha_Recoleccion"];
+                    }
+                    $("#tbla").append("<tbody><tr class='dev'><td style='text-align: center; color:blue; text-decoration: underline; cursor:pointer;' onclick='detallespedido();'>"+mensaje[i]["Pedido"]+"</td><td style='text-align: center'>"+mensaje[i]["Folio"]+"</td><td style='text-align: center'>"+mensaje[i]["Cliente"]+"</td><td style='text-align: center'>"+mensaje[i]["Obra"]+"</td><td style='text-align: center'>"+mensaje[i]["Creado"]+"</td><td style='text-align: center'>"+mensaje[i]["Devolucion"]+"</td><td onclick='abrirmodalrec();' style='text-align: center; color:blue; text-decoration: underline; cursor:pointer;' >"+fecrec+"</td><td style='text-align: center; color:blue; text-decoration: underline; cursor:pointer;' >Ver Ticket</td></tr></tbody>");
+                    }
+                    pedidocnt2=mensaje[i]['Pedido'];
+                  }
+                });
+          }
+          //
+        }
+        function abrirmodalrec(){
+          $('#myModalrecoleccionescons').modal('show');
+        }
+         function validar(e) {        
+                $("#restriccion").css("display", "none");
+                 var clienterz= document.getElementById("clt").value;
+                  if (clienterz != ''){
+                    $.post("{{ path('llenarcuentas2') }}", {clienterz:clienterz}, function(mensaje) {
+                  $("#txt3").html(mensaje);
+
+                    if(mensaje[0]['restringir'] =='Restringido'){
+                        $("#restriccion").show();
+                    }else{
+                    for (var i=0, total = mensaje.length; i < total; i++) {
+                      $("#categoryname2").append("<option>"+mensaje[i]['cuenta_Id']+"</option>");
+                    }
+                  }
+                    });
+                  }else{
+                    document.getElementById("combocta").value='';
+                  }
+              }
+                function llenardatalist(){
+                  $.post("{{ path('datalist') }}", function(mensaje) {
+                  $("#txt3").html(mensaje);
+                    for (var i=0, total = mensaje.length; i < total; i++) {
+                        $("#categoryname").append("<option>"+mensaje[i]['razonsocial']+"</option>");
+                    }
+                    });
+                  }
+
+            $( function() {
+               $.datepicker.regional['es'] = {
+                  closeText: 'Cerrar',
+                  prevText: '< Ant',
+                  nextText: 'Sig >',
+                  currentText: 'Hoy',
+                  monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                  monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+                  dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                  dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+                  dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+                  weekHeader: 'Sm',
+                  dateFormat: 'dd/mm/yy',
+                  firstDay: 1,
+                  isRTL: false,
+                  showMonthAfterYear: false,
+                  yearSuffix: ''
+           };
+           $.datepicker.setDefaults($.datepicker.regional['es']);
+                $( "#hasta" ).datepicker();
+                $( "#fecharec" ).datepicker();
+                $( "#desde" ).datepicker();
+                $( "#fecharechasta" ).datepicker();
+                $( "#fecharecdesde" ).datepicker();
+                $( "#fechadevdesde" ).datepicker();
+                $( "#fechadevhasta" ).datepicker();
+                $( "#fecha_recoleccion" ).datepicker();
+
+                 $("#fecha_emision_desde").datepicker('option', { dateFormat: "dd/mm/yy" });
+                 $("#fecha_emision_hasta").datepicker('option', { dateFormat: "dd/mm/yy" });
+                 $("#fechadevdesde").datepicker('option', { dateFormat: "dd/mm/yy" });
+                 $("#fechadevhasta").datepicker('option', { dateFormat: "dd/mm/yy" });
+                 $("#fecharec").datepicker('option', { dateFormat: "dd/mm/yy" });
+                 $("#fecha_recoleccion").datepicker('option', { dateFormat: "dd/mm/yy" });
+
+              });
+        //}
+$(document).ready(function(){
+
+       
+    });
+  function detallespedido(){
+       $("#tbla").on("click", "td" , function(){
+        var celda = $(this);
+        pedidotabla = $(this).parents("tr").find("td").eq(0).html();
+        if(celda.html()=='Ver Ticket'){
+
+          reporteticket(pedidotabla)
+        }
+
+
+          var pd = pedidotabla;
+          $("#gif").show();
+        var url=("{{ path('pedidos_detalles', { 'id':'xxx' }) }}");
+         url = url.replace("xxx", pd);
+        $.ajax({
+            dataType: "html",
+            url: url,
+            type: "GET",
+            data: {id: pd},
+            success: function(data)
+            {
+             location.href=url;   
+            }
+        });   
+        }); 
+    }
+function reporteticket(pedidotbl){
+  window.open("detallespedido/reporteticket/"+pedidotbl);
+}
+  function registrar_recolecciones(){
+        if (document.getElementById("fecha_recoleccion").value ==''){
+          alert('Seleccione una Fecha para Programar la Recolección');
+
+        }else{
+          $('.loader').show();
+            $.post("{{ path('registrar_recoleccion') }}", {pedido:pedidotabla,fecha:document.getElementById("fecha_recoleccion").value}, function(mensaje) {
+              $('.loader').hide();
+          });
+         alert('Recoleccion Programada');   
+         $('#myModalrecoleccionescons').modal('hide');
+         location.reload();
+        }
+    }
+  function recoleccion(){
+    $("#gifcargando").show();
+    $('.loader').show();
+       $.post("{{ path('consultar_rec') }}", {pedido:pedidotabla}, function(mensaje) {
+        $('.loader').hide();
+        $("#fecha_recoleccion").html(mensaje);
+        document.getElementById("fecha_recoleccion").value=mensaje;
+        $("#gifcargando").hide();
+          });
+
+      $('#myModalrecoleccionescons').modal('show');
+    }
+    function eliminarrec(){
+      var statusConfirm =(confirm("Desea Eliminar esta Recoleccion?"))
+        if (statusConfirm == true){ 
+          $('.loader').show();
+             $.post("{{ path('eliminar_recoleccion') }}", {pedido:pedidotabla}, function(mensaje)  {
+                      $("#txt3").html(mensaje);
+                      $('.loader').hide();
+             });
+
+             alert('Recoleccion Eliminada');
+             location.reload();
+             
+              $('#myModalrecolecciones').modal('hide');
+             document.getElementById("fecha_recoleccion").value='';
+         }
+      }
+  </script>
+  {%endblock%}
+
+{% block body %}
+
+
+<form method="post">
+  <fieldset>
+    <legend style="text-align: center;">Consultas</legend>
+        <div style="text-align: center;">
+          <label><input type="radio" name="rap" id="rdped" value="1">Rentas</label>
+          <label><input type="radio" name="rap" id="rdrec" value="2">Recolecciones</label>
+        </div>
+    <div id="cta_comb" class="cmb-cta" style="margin-top: 0.5%; text-align: center;">
+       <label class="pedido">Renta:</label><input id="pedido" class="pedtxt" type="text" name="inptpedido" size="10">
+       <label class="folio" >Folio:</label><input id="folio" class="foltxt" type="text" name="inptfolio" size="10">
+       <span  id="restriccion" style="background-color:red; display: none">RESTRINGIDO</span>
+       <label class="label3" for="cliente" style="margin-left: -2px;">Cliente</label>
+
+       <input name="clt" type="text" id="clt" autocomplete="off" list="categoryname"></input>
+                <datalist id="categoryname">
+                  <script type="text/javascript">
+                      llenardatalist();
+                  </script>
+                </datalist>
+    <label id="lblcta" class="label4" for="cuenta">Obra</label>
+    <input type="text" id="combocta" autocomplete="off" list="categoryname2" > </input>
+        <datalist id="categoryname2">
+        </datalist>                
+   </div> 
+    <div style="text-align: center;">
+      <label >Creados Desde:</label><input  id="desde" type="text" name="fecha_emision_desde">
+      <label class="hasta" id="lblhasta">Hasta:</label><input id="hasta" class="hastatxt" type="text" name="fecha_emision_hasta" size="10"> 
+
+      <label id="lblst">Status</label>
+      <input type="text" id="status" autocomplete="off" list="categorynamestatus" name="statu"> </input>
+      <datalist id="categorynamestatus">
+        {% for status in status %}
+          <option data-id="{{ status.id}}" value="{{ status.statussaldos }}"></option>
+        {% endfor %}
+        </datalist>
+
+        <label id="lbldev" class="devueltos">Devueltos de:</label><input id="fechadevdesde" class="devueltostxt" type="text" name="fechadevdesde" size="10"> 
+       <label class="hasta" id="lblhasta1">Hasta:</label><input id="fechadevhasta" class="hastatxt" type="text" name="fechadevhasta" size="10">
+        <label class="hasta" id="lblrecdesde" hidden="hidden">Fecha de Recoleccion Desde:</label><input id="fecharecdesde" class="hastatxt" type="text" name="" size="10" hidden="hidden">
+        <label class="hasta" id="lblrechasta" hidden="hidden">Fecha de Recoleccion Hasta:</label><input id="fecharechasta" class="hastatxt" type="text" name="" size="10" hidden="hidden">
+
+    </div>  
+</fieldset>
+<div id="div1" style="height: 280px;" class="table table-striped">
+  <table id="tbla" width="100%" align="center" class="table">
+     <tr id="consul_pedido" align="center">
+         <th style="text-align: center;">Renta</th>
+         <th style="text-align: center;">Folio</th>
+         <th style="text-align: center;">Cliente</th>
+         <th style="text-align: center;">Obra</th>
+         <th style="text-align: center;">Emision</th>
+         <th style="text-align: center;">Devolucion</th>
+         <th style="text-align: center;">Status Pedido</th>
+         <th style="text-align: center;">Status Saldo</th>
+         <th style="text-align: center;">Estado Pedido</th>
+         <th style="text-align: center;">Estado Pago</th>
+     </tr>
+  </table>  
+</div>
+ <script type="text/javascript">
+                  document.getElementById("tbla").onclick=function(e){ 
+                      if(!e)e=window.event; 
+                      if(!e.target) e.target=e.srcElement; 
+                      var TR=e.target;
+                      while( TR.nodeType==1 && TR.tagName.toUpperCase()!="TR" )
+                      TR=TR.parentNode;
+                      var celdas=TR.getElementsByTagName("TD");
+
+                      if( celdas.length!=0 )
+                      //  pedidotabla='';
+                      pedidotabla= celdas[0].innerHTML;
+
+
+
+                    document.getElementById("fecha_recoleccion").value=( celdas[6].innerHTML);
+                    }
+            </script>
+<br>
+   <input style="display: block;margin: auto; width: 20%;" id="btnbuscar" class="btn btn-info btn-lg" type="button" value="Buscar" name="buscar" onclick="filtrar();">
+</form>
+
+<!-- RECOLECCIONES -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<div class="modal fade" id="myModalrecoleccionescons" role="dialog">
+    <div class="modal-dialog">
+      <br>
+      <div class="modal-content" style=" text-align: center;">
+        <label style=" font-size: 40px;">Programar Recolección</label>
+        
+          <div>
+            <br>
+            <br>
+            <div style="text-align: center;">
+        
+
+             <label  class="cantidad">Fecha de Recolección</label>&nbsp;<input id="fecha_recoleccion" class="cantxt" type="text" name="" size="10" value="">
+            </div>
+        <br>
+      <div align="center">
+         
+        <input id="btn_recoleccion" class="btn btn-info btn-lg" type="button" value="Programar Recolección" onclick="registrar_recolecciones();"> <img id="gifcargando" class="logo" src="{{ asset('img/Loading_icon.gif')}}" style="width: 15%;" hidden="hidden">
+       
+         <button class="btn btn-danger btn-lg" id="btn_eliminar_rec" type="button" onclick="eliminarrec();">Limpiar<span class="glyphicon glyphicon-trash"></span></button></button>
+      </div>
+      <br>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}
